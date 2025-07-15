@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credits | Meczomat</title>
-    <link rel="stylesheet" href="./dist/css/style.css">
+    <title>Meczomat</title>
+    <link rel="stylesheet" href="./dist/css/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> -->
 </head>
 <body>
     <div class="header">
@@ -46,43 +47,57 @@
             </div>
         </nav>
     </div>
-
-    <main class="credits-container">
-        <h1>Credits & Attributions</h1>
+    <main>
         
-        <section class="credits-section">
-            <h2>Ikony i grafiki</h2>
-            
-            <div class="credit-item">
-                <h3>Ikony społecznościowe</h3>
-                <ul>
-                    <li>
-                        Icon by <a href='https://iconpacks.net/?utm_source=link-attribution&utm_content=5222'>Iconpacks</a>
-                    </li>
-                    <!-- Dodaj pozostałe ikony -->
-                </ul>
-            </div>
+        <section class="search">
+            <input type="text" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
+        </section>
 
-            <div class="credit-item">
-                <h3>Mapa</h3>
-                <ul>
-                    <li>
-                        <a href="https://commons.wikimedia.org/wiki/File:POL_location_map.svg">Hiuppo</a>, <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>, via Wikimedia Commons
-                    </li>
-                    <!-- Dodaj pozostałe ikony -->
-                </ul>
+        <section class="sponsor">
+            <div class="sponsor-placeholder">MIEJSCE DLA POTENCJALNEGO SPONSORA</div>
+        </section>
+
+
+        <section class="results_table">
+            <div class="table-container">
+                <h3>Tabela wyników</h3>
+                <div class="table-scroll">
+                    <table class="league-table">
+                        <thead>
+                            <tr>
+                                <th>Poz</th>
+                                <th>Liga</th>
+                                <th>Nazwa klubu</th>
+                                <th>Różnica</th>
+                                <th>Pkt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dane będą podawane przez JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="highlights">
+            <h3>NAJCIEKAWSZE SKRÓTY</h3>
+            <div class="highlight-items">
+                <div class="highlight-item">Orzeł 3:0 Lechia</div>
+                <div class="highlight-item">Orzeł 3:0 Lechia</div>
+                <div class="highlight-item">Orzeł 3:0 Lechia</div>
             </div>
         </section>
         
-        <section class="credits-section">
-            <h2>Technologie</h2>
-            <ul>
-                <li>Font: Bebas Neue z Google Fonts</li>
-                <li>jQuery</li>
-            </ul>
+        <section id="news" class="news">
+            <h3>NAJCIEKAWSZE NEWSY</h3>
+            <div class="news-items">
+                <div class="news-item">Nagłówek</div>
+                <div class="news-item">Nagłówek</div>
+                <div class="news-item">Nagłówek</div>
+            </div>
         </section>
     </main>
-
     <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -101,13 +116,19 @@
             
             <div class="footer-section">
                 <h4>Social Media</h4>
-                <div class="footer-social">
-                    <a href="https://www.facebook.com/" class="social-icon">
-                        <img src="./dist/images/facebook-white.svg" class="default-icon">
-                        <img src="./dist/images/facebook-color.svg" class="hover-icon">
-                    </a>
-                    <!-- Pozostałe ikony -->
-                </div>
+                <ul class="footer-links">
+                    <li><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Youtube</a></li>
+                    <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Kontakt</h4>
+                <ul class="footer-links">
+                    <li>+48 123 456 789</li>
+                    <li>test@test.pl</li>
+                </ul>
             </div>
         </div>
         
@@ -115,5 +136,7 @@
             <p>&copy; 2025 Meczomat.pl | Wszelkie prawa zastrzeżone</p>
         </div>
     </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/dist/js/main.js"></script>
 </body>
 </html>
