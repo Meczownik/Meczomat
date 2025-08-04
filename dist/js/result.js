@@ -21,6 +21,7 @@ $(function () {
 
   $.getJSON(fetchUrl)
     .done(teams => {
+      console.log('Pobrane drużyny:', teams);
       if (!teams.length) {
         $tbody.html("<tr><td colspan='6'>Brak drużyn dla podanych parametrów.</td></tr>");
         return;
@@ -36,18 +37,25 @@ $(function () {
 
 
     
-  function renderTable(teams) {
-    const rows = teams.map((team, i) => `
-      <tr>
-        <td>${i + 1}</td>
-        <td>${team.nazwaDruzyny}</td>
-        <td>${team.liga}</td>
-        <td>${team.okreg}</td>
-        <td>${team.punkty ?? '-'}</td>
-        <td>${team.roznica ?? '-'}</td>
-      </tr>`).join('');
-    $tbody.html(rows);
+ function renderTable(teams) {
+  const rows = teams.map((team, i) => `
+    <tr class="team-row" data-id="${team.id ?? team.Id}">
+      <td>${i + 1}</td>
+      <td>${team.Nazwa}</td>
+      <td>${team.liga}</td>
+      <td>${team.okreg}</td>
+      <td>${team.punkty ?? '-'}</td>
+      <td>${team.rozegrane_mecze ?? '-'}</td>
+    </tr>`).join('');
+  $tbody.html(rows);
+}
+
+$tbody.on('click', '.team-row', function () {
+  const teamid = $(this).data('id');
+  if (teamid) {
+    window.location.href = `team_results.html?id=${teamid}`;
   }
+});
 
 
 
@@ -66,7 +74,7 @@ $(function () {
   }
 
   const filtered = loadedTeamsR.filter(team =>
-    team.nazwaDruzyny.toLowerCase().includes(query)
+    team.Nazwa.toLowerCase().includes(query)
   );
 
   if (!filtered.length) {
