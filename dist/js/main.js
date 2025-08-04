@@ -113,7 +113,7 @@ $(document).ready(function(){
         });
     });
 });
-
+/*
 // Przykładowe dane results table
 const sampleData = [
     {
@@ -153,7 +153,7 @@ const sampleData = [
     },
     // wincyj timków
 ];
-
+*/
 function populateTable(data) {
     const tbody = document.querySelector('.league-table tbody');
     tbody.innerHTML = '';
