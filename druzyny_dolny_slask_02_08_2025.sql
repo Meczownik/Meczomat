@@ -28,14 +28,16 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `druzyny_dolny_slask` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Nazwa` text NOT NULL,
   `liga` enum('Ekstraklasa','Okręgówka','IV','Klasa A','Klasa B') NOT NULL,
   `okreg` enum('Wałbrzych','Wrocław','Jelenia Góra','Legnica') DEFAULT NULL,
   `grupa` varchar(20) DEFAULT NULL,
   `punkty` int(11) NOT NULL DEFAULT 0,
-  `roznica` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`Id`)
+  `rozegrane_mecze` int(11) NOT NULL DEFAULT 0,
+  `strzelone_bramki` int(11) NOT NULL DEFAULT 0,
+  `stracone_bramki` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 --
 -- Dumping data for table `druzyny_dolny_slask`
@@ -44,11 +46,8 @@ CREATE TABLE `druzyny_dolny_slask` (
 -- Indeksy dla zrzutów tabel
 --
 
-INSERT INTO `druzyny_dolny_slask` (`Id`, `NazwaDruzyny`, `liga`, `okreg`, `grupa`, `punkty`, `roznica`) VALUES
+INSERT INTO `druzyny_dolny_slask` (`id`, `Nazwa`, `liga`, `okreg`, `grupa`, `punkty`, `rozegrane_mecze`,`strzelone_bramki`,`stracone_bramki`) VALUES
 
-
-
--- IV
 (21001, 'Legsad Kościelec', 'IV', 'Wrocław', 'Gr. 1', 0, 0),
 (21002, 'Górnik Złotoryja', 'IV', 'Wrocław', 'Gr. 1', 0, 0),
 (21003, 'Twardy Świętoszów', 'IV', 'Wrocław', 'Gr. 1', 0, 0),
