@@ -114,6 +114,7 @@ $(document).ready(function(){
     });
 });
 
+/*
 // Przykładowe dane results table
 const sampleData = [
     {
@@ -153,7 +154,7 @@ const sampleData = [
     },
     // wincyj timków
 ];
-
+*/
 function populateTable(data) {
     const tbody = document.querySelector('.league-table tbody');
     tbody.innerHTML = '';
@@ -180,27 +181,23 @@ document.addEventListener('DOMContentLoaded', () => {
 const API_BASE = 'http://localhost:3000';
 
 $(document).ready(function () {
-  $('#teamSearchBtn').on('click', async function () {
-    const input = $('#teamSearchInput');
-    const errorDiv = $('#teamSearchError');
-    const resultsSection = $('#searchResults');
-    const resultsList = $('#teamResultsList');
+  const input = $('#teamSearchInput');
+  const errorDiv = $('#teamSearchError');
+  const autocompleteList = $('#autocompleteList');
+
+  function hideAutocomplete() {
+    autocompleteList.empty().hide();
+  }
+
+  input.on('input', async function () {
     const name = input.val().trim();
-
     errorDiv.text('');
-    resultsSection.hide();
-    resultsList.empty();
+    autocompleteList.empty().hide();
 
-    
-
-    if (!name) {
-      errorDiv.text('Wpisz nazwę drużyny!');
-      return;
-    }
+    if (!name) return;
 
     try {
       const res = await fetch(`${API_BASE}/teams/search?name=${encodeURIComponent(name)}`);
-
       const data = await res.json();
 
       if (!res.ok) {
@@ -212,31 +209,39 @@ $(document).ready(function () {
         data.forEach(team => {
           const item = $(`
             <li>
-              <strong>${team.nazwaDruzyny}</strong><br>
-              Liga: ${team.liga}<br>
-              Okręg: ${team.okreg || 'brak'}<br>
+              <strong>${team.Nazwa}</strong> - ${team.liga}
             </li>
           `);
-          resultsList.append(item);
+
+          item.on('click', () => {
+            window.location.href = `/team_results.html?id=${team.id}`;
+          });
+
+          autocompleteList.append(item);
         });
-        resultsSection.show();
-      } else {
-        errorDiv.text('Nie znaleziono takiej drużyny.');
+
+        autocompleteList.show();
       }
     } catch (err) {
       console.error(err);
       errorDiv.text('Błąd połączenia z serwerem.');
     }
   });
-  
-    //obsługa entera
-    $('#teamSearchInput').on('keydown', function (e) {
-        if (e.which === 13 || e.key === 'Enter') {
-            $('#teamSearchBtn').click();
-        }
-    });
 
+  input.on('keydown', function (e) {
+    if ((e.which === 13 || e.key === 'Enter') && autocompleteList.children().length > 0) {
+      e.preventDefault();
+      autocompleteList.children().first().click();
+    }
+  });
+
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('#teamSearchInput, #autocompleteList').length) {
+      hideAutocomplete();
+    }
+  });
 });
+
 
 
 //obsługa przycisków do results.html
