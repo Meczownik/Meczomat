@@ -52,20 +52,16 @@
     </div>
     <main>
         
-        <!--Sekcja ładowania druzyn z search-->
+        <!-- Sekcja ładowania drużyn z autocomplete -->
         <div style="color: white;">
-        <section class="search">
-            <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
-            <button id="teamSearchBtn">Szukaj</button>
-            <div id="teamSearchError" class="error-message"></div>
-        </section>
-
-        <section id="searchResults2" class="search-results" style="display: none; margin-top: 20px;">
-            <h3>Wyniki wyszukiwania:</h3>
-            <ul id="teamResultsList2"></ul>
-        </section>
+            <section class="search" style="position: relative;">
+                <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ" autocomplete="off">
+                <ul id="autocompleteList" class="autocomplete-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; color: black; z-index: 9999; list-style: none; margin: 0; padding: 0; border: 1px solid #ccc;"></ul>
+                <div id="teamSearchError" class="error-message" style="color: red;"></div>
+            </section>
         </div>
-        <!--koniec sekcji ładowania druzyn z search-->
+        <!-- Koniec sekcji -->
+
 
         <section class="sponsor">
             <div class="sponsor-placeholder">MIEJSCE DLA POTENCJALNEGO SPONSORA</div>

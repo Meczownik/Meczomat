@@ -573,7 +573,58 @@ section {
 }
 
 .team-summary {
+<<<<<<< HEAD
   background-color: #222;
   padding: 20px;
   border-radius: 8px;
 }
+=======
+    border-color: #007550;
+    border-radius: 1px;
+    background-color: #002612;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/*style do wyświetlania podpowiedzi w search*/
+.autocomplete-list {
+  position: absolute;
+  border: 1px solid #ccc;
+  color: black;
+  background: white;
+  list-style: none;
+  transform: translateX(9px);
+  margin: 0;
+  padding: 0;
+  width: 60%;
+  max-height: 200px;
+  border-radius: 8px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px; /* ważne! definiuje widoczność */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+.autocomplete-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.autocomplete-list li:hover {
+  background-color: #f0f0f0;
+}
+
+/*--------------------------------------*/
+>>>>>>> refs/remotes/origin/feature/results-integration

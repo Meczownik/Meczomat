@@ -10,7 +10,7 @@ $(function () {
   const $input = $('#teamSearchInput');
   const $error = $('#teamSearchError');
   const $resultsSection2 = $('#searchResults2');
-  const $resultsList2 = $('#teamResultsList2');
+  const $autocompleteList = $('#autocompleteList'); 
 
   if (!liga || !okreg || !grupa) {
     $tbody.html("<tr><td colspan='6'>Brakuje parametrów w URL (liga, okręg lub grupa).</td></tr>");
@@ -48,6 +48,7 @@ $(function () {
       <td>${team.rozegrane_mecze ?? '-'}</td>
     </tr>`).join('');
   $tbody.html(rows);
+<<<<<<< HEAD
 }
 
 $tbody.on('click', '.team-row', function () {
@@ -83,17 +84,74 @@ $tbody.on('click', '.team-row', function () {
   }
 
   renderTable(filtered);
+=======
+>>>>>>> refs/remotes/origin/feature/results-integration
 }
 
-$input.on('keypress', function (e) {
-  if (e.which === 13) {
-    searchTeams();
+$tbody.on('click', '.team-row', function () {
+  const teamid = $(this).data('id');
+  if (teamid) {
+    window.location.href = `team_results.html?id=${teamid}`;
   }
 });
 
+function hideAutocomplete() {
+  $autocompleteList.empty().hide();
+}
 
-  $('#teamSearchBtn').click(searchTeams);
-  $input.on('keydown', e => {
-    if (e.key === 'Enter') searchTeams();
-  });
+$input.on('input', async function () {
+  const query = $input.val().trim();
+  $error.text('');
+  $autocompleteList.empty().hide();
+
+  if (!query) return;
+
+  try {
+    const res = await fetch(`http://localhost:3000/teams/search?name=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      $error.text(data.message || 'Błąd podczas wyszukiwania.');
+      return;
+    }
+
+    if (data.length > 0) {
+      data.forEach(team => {
+        const item = $(`
+          <li class="autocomplete-item" style="cursor:pointer;">
+            <strong>${team.Nazwa}</strong> - ${team.liga} - ${team.okreg}
+          </li>
+        `);
+
+        item.on('click', () => {
+          window.location.href = `/team_results.html?id=${team.id}`;
+        });
+
+        $autocompleteList.append(item);
+      });
+
+      $autocompleteList.show();
+      $resultsSection2?.show(); // opcjonalnie
+    } else {
+      $autocompleteList.hide();
+      $resultsSection2?.hide();
+    }
+  } catch (err) {
+    console.error(err);
+    $error.text('Błąd połączenia z serwerem.');
+  }
+});
+
+$input.on('keydown', function (e) {
+  if ((e.which === 13 || e.key === 'Enter') && $autocompleteList.children().length > 0) {
+    e.preventDefault();
+    $autocompleteList.children().first().click();
+  }
+});
+
+$(document).on('click', function (e) {
+  if (!$(e.target).closest('#teamSearchInput, #autocompleteList').length) {
+    hideAutocomplete();
+  }
+});
 });

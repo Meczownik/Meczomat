@@ -209,7 +209,11 @@ $(document).ready(function () {
         data.forEach(team => {
           const item = $(`
             <li>
+<<<<<<< HEAD
               <strong>${team.Nazwa}</strong> - ${team.liga}
+=======
+              <strong>${team.Nazwa}</strong> - ${team.liga}</strong> - ${team.okreg}
+>>>>>>> refs/remotes/origin/feature/results-integration
             </li>
           `);
 
