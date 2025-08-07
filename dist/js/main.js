@@ -209,7 +209,7 @@ $(document).ready(function () {
         data.forEach(team => {
           const item = $(`
             <li>
-              <strong>${team.Nazwa}</strong> - ${team.liga}
+              <strong>${team.Nazwa}</strong> - ${team.liga}</strong> - ${team.okreg}
             </li>
           `);
 

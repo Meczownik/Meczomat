@@ -10,7 +10,7 @@ $(function () {
   const $input = $('#teamSearchInput');
   const $error = $('#teamSearchError');
   const $resultsSection2 = $('#searchResults2');
-  const $resultsList2 = $('#teamResultsList2');
+  const $autocompleteList = $('#autocompleteList'); 
 
   if (!liga || !okreg || !grupa) {
     $tbody.html("<tr><td colspan='6'>Brakuje parametrów w URL (liga, okręg lub grupa).</td></tr>");
@@ -57,43 +57,63 @@ $tbody.on('click', '.team-row', function () {
   }
 });
 
-
-
-  function searchTeams() {
-  const query = $input.val().trim().toLowerCase();
-  $error.text('');
-
-  if (!query) {
-    renderTable(loadedTeamsR);
-    return;
-  }
-
-  if (!loadedTeamsR.length) {
-    $error.text('Brak załadowanych drużyn do przeszukania.');
-    return;
-  }
-
-  const filtered = loadedTeamsR.filter(team =>
-    team.Nazwa.toLowerCase().includes(query)
-  );
-
-  if (!filtered.length) {
-    $error.text('Nie znaleziono takiej drużyny w wybranej lidze, okręgu i grupie.');
-    return;
-  }
-
-  renderTable(filtered);
+function hideAutocomplete() {
+  $autocompleteList.empty().hide();
 }
 
-$input.on('keypress', function (e) {
-  if (e.which === 13) {
-    searchTeams();
+$input.on('input', async function () {
+  const query = $input.val().trim();
+  $error.text('');
+  $autocompleteList.empty().hide();
+
+  if (!query) return;
+
+  try {
+    const res = await fetch(`http://localhost:3000/teams/search?name=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      $error.text(data.message || 'Błąd podczas wyszukiwania.');
+      return;
+    }
+
+    if (data.length > 0) {
+      data.forEach(team => {
+        const item = $(`
+          <li class="autocomplete-item" style="cursor:pointer;">
+            <strong>${team.Nazwa}</strong> - ${team.liga} - ${team.okreg}
+          </li>
+        `);
+
+        item.on('click', () => {
+          window.location.href = `/team_results.html?id=${team.id}`;
+        });
+
+        $autocompleteList.append(item);
+      });
+
+      $autocompleteList.show();
+      $resultsSection2?.show(); // opcjonalnie
+    } else {
+      $autocompleteList.hide();
+      $resultsSection2?.hide();
+    }
+  } catch (err) {
+    console.error(err);
+    $error.text('Błąd połączenia z serwerem.');
   }
 });
 
+$input.on('keydown', function (e) {
+  if ((e.which === 13 || e.key === 'Enter') && $autocompleteList.children().length > 0) {
+    e.preventDefault();
+    $autocompleteList.children().first().click();
+  }
+});
 
-  $('#teamSearchBtn').click(searchTeams);
-  $input.on('keydown', e => {
-    if (e.key === 'Enter') searchTeams();
-  });
+$(document).on('click', function (e) {
+  if (!$(e.target).closest('#teamSearchInput, #autocompleteList').length) {
+    hideAutocomplete();
+  }
+});
 });
