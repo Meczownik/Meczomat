@@ -310,3 +310,16 @@ $(document).ready(function () {
   });
 });
 
+
+$(document).ready(function () {
+  $('#lowerLeaguesBtn').on('click', function (e) {
+    e.preventDefault();
+    const $target = $('.map-section');
+    if ($target.length) {
+      $('html, body').animate({
+        scrollTop: $target.offset().top - 300// opcjonalnie odejmij padding/header
+      }, 200); // czas animacji w ms
+    }
+  });
+});
+
