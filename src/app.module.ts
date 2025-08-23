@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TeamDTO } from './teams/team.entity';
+import { Team } from './teams/team.entity';
 import { TeamService } from './teams/team.service';
 import { TeamController } from './teams/team.controller';
+import { MatchModule } from './match/match.module';
+import { StandingsModule } from './standings/standings.module';
+import { GroupModule } from './group/group.module';
+import { SeasonModule } from './season/season.module';
+import { Standing } from './standings/entities/standing.entity';
+import { Match } from './match/entities/match.entity';
+import { Season } from './season/entities/season.entity';
+import { Group } from './group/entities/group.entity';
 //Ładuje zmienne środowiskowe (ConfigModule). 
 // ✔ Łączy się z MySQL (TypeOrmModule.forRoot()). 
 // ✔ Rejestruje encję Team w module (forFeature()). 
@@ -23,11 +31,15 @@ import { TeamController } from './teams/team.controller';
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [TeamDTO],
+        entities: [Team, Group, Season, Match, Standing],
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([TeamDTO]),
+    TypeOrmModule.forFeature([Team, Group, Season, Match, Standing]),
+    MatchModule,
+    StandingsModule,
+    GroupModule,
+    SeasonModule,
   ],
   controllers: [TeamController],
   providers: [TeamService],

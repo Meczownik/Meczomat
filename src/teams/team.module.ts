@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TeamDTO } from './team.entity';
+import { Team } from './team.entity';
 import { TeamService } from './team.service';
 import { TeamController } from './team.controller';
 
@@ -14,7 +14,7 @@ import { TeamController } from './team.controller';
 // ✔ Eksportuje TeamModule, aby można było go używać w aplikacji.
 
 @Module({
-    imports: [TypeOrmModule.forFeature([TeamDTO])],
+    imports: [TypeOrmModule.forFeature([Team])],
     providers: [TeamService],
     controllers: [TeamController],
 })

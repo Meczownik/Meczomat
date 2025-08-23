@@ -1,53 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TeamDTO } from './team.entity';
+import { Team } from './team.entity';
 import { Repository } from 'typeorm';
-
-//Ten plik definiuje serwis w NestJS,
-//który zarządza danymi drużyn piłkarskich
-//i komunikuje się z bazą danych
-
-//Serwis TeamService zarządza danymi drużyn. 
-// ✔ Używa InjectRepository(Team), aby połączyć się z bazą danych. 
-// ✔ Metoda findAll() pobiera wszystkie drużyny z tabeli. 
-// ✔ Możemy używać tego serwisu w kontrolerze, 
-// aby udostępniać dane przez API.
 
 @Injectable()
 export class TeamService {
     constructor(
-        @InjectRepository(TeamDTO)
-        private readonly teamRepository: Repository<TeamDTO>,
+        @InjectRepository(Team)
+        private readonly teamRepository: Repository<Team>,
     ) {}
 
 
-    async findByOneId(id: number): Promise<TeamDTO | null>{
+    async findByOneId(id: number): Promise<Team | null>{
         return this.teamRepository
             .createQueryBuilder('team')
             .where('team.id  = :id', { id })
             .getOne();
     }
 
-    async findAll(): Promise<TeamDTO[]> {
-        return this.teamRepository.find();
+    async findAll(): Promise<Team[]> {
+        return this.teamRepository.find({
+            relations: ['group'],
+        });
     }
 
-    async findByName(name:string): Promise<TeamDTO[]>{
+    async findByName(name:string): Promise<Team[]>{
         return this.teamRepository
             .createQueryBuilder('team')
-            .where('LOWER(team.Nazwa) LIKE LOWER(:name)', { name: `%${name}%`})
+            .where('LOWER(team.name) LIKE LOWER(:name)', { name: `%${name}%`})
             .getMany();
     }
 
-    async filterByLigaAndOkreg(liga: string, okreg: string): Promise<TeamDTO[]>{
+    /*
+    async filterByLigaAndOkreg(liga: string, okreg: string): Promise<Team[]>{
         return this.teamRepository
             .createQueryBuilder('team')
-            .where('LOWER(team.liga) = LOWER(:liga)', { liga })
-            .andWhere('LOWER(team.okreg) = LOWER(:okreg)', { okreg })
+            .innerJoinAndSelect('league_groups', 'lg', 'team.group_id = lg.id')
+            .where('LOWER(lg.league) = LOWER(:liga)', { liga })
+            .andWhere('LOWER(lg.district) = LOWER(:okreg)', { okreg })
             .getMany();
     }
 
-    async filterByNameLigaOkreg(name: string, liga: string, okreg: string): Promise<TeamDTO[]>{
+    async filterByNameLigaOkreg(name: string, liga: string, okreg: string): Promise<Team[]>{
         return this.teamRepository
             .createQueryBuilder('team')
             .where('LOWER(team.Nazwa) LIKE LOWER(:name)', { name: `%${name}%` })
@@ -60,14 +54,15 @@ export class TeamService {
         liga: string,
         okreg: string,
         grupa: string
-    ): Promise<TeamDTO[]> {
+    ): Promise<Team[]> {
         return this.teamRepository
             .createQueryBuilder('team')
-            .where('LOWER(team.liga) = LOWER(:liga)', { liga })
-            .andWhere('LOWER(team.okreg) = LOWER(:okreg)', { okreg })
-            .andWhere('LOWER(team.grupa) = LOWER(:grupa)', { grupa })
+            .innerJoinAndSelect('league_groups', 'lg', 'team.group_id = lg.id')
+            .where('LOWER(lg.league) = LOWER(:liga)', { liga })
+            .andWhere('LOWER(lg.district) = LOWER(:okreg)', { okreg })
+            .andWhere('LOWER(lg.name) = LOWER(:grupa)', { grupa })
             .getMany();
     }
 
-    
+    */
 }

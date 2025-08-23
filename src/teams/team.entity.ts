@@ -1,50 +1,34 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
+import { Group } from '../group/entities/group.entity';
 
-@Entity('druzyny_dolny_slask')
-export class TeamDTO {
+@Entity('teams')
+export class Team {
+  @PrimaryGeneratedColumn()
+  @ApiProperty({ description: 'ID drużyny' })
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    @ApiProperty()
-    id: number;
+  @Column({ name: 'name', type: 'varchar', length: 100 })
+  @ApiProperty({ description: 'Nazwa drużyny' })
+  name: string;
 
-    @Column({ name: 'Nazwa', type: 'text' })
-    @ApiProperty()
-    Nazwa: string;
+  @Column({
+    type: 'enum',
+    enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'],
+  })
+  @ApiProperty({ enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'], description: 'Liga' })
+  liga: string;
 
-    @Column({
-        type: 'enum',
-        enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'],
-    })
-    @ApiProperty({ enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'] })
-    liga: string;
+  @Column({
+    type: 'enum',
+    enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'],
+    nullable: true,
+  })
+  @ApiProperty({ enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'], nullable: true, description: 'Okręg' })
+  okreg: string;
 
-    @Column({
-        type: 'enum',
-        enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'],
-        nullable: true,
-    })
-    @ApiProperty({ enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'], nullable: true })
-    okreg: string;
-
-    @Column({ type: 'varchar', length: 20, nullable: true })
-    @ApiProperty({ description: 'Grupa ligi (np. Gr. 1, Gr. 2)' })
-    grupa?: string;
-
-    @Column({ type: 'int', default: 0 })
-    @ApiProperty({ description: 'Punkty drużyny' })
-    punkty: number;
-
-    @Column({ type: 'int', default: 0 })
-    @ApiProperty({ description: 'Rozegrane mecze' })
-    rozegrane_mecze: number;
-
-    @Column({ type: 'int', default: 0 })
-    @ApiProperty({ description: 'Strzelone bramki' })
-    strzelone_bramki: number;
-
-    @Column({ type: 'int', default: 0 })
-    @ApiProperty({ description: 'Stracone bramki' })
-    stracone_bramki: number;
-
+  @ManyToOne(() => Group, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'group_id' })
+  @ApiProperty({ description: 'Przynależność do grupy w danym sezonie' })
+  group: Group;
 }
