@@ -19,10 +19,6 @@ export class Standing {
   @ApiProperty({ description: 'Grupa, w której drużyna gra' })
   group: Group;
 
-  @Column({ type: 'int' })
-  @ApiProperty({ description: 'Miejsce w tabeli' })
-  position: number;
-
   @Column({ type: 'int', default: 0 })
   @ApiProperty({ description: 'Punkty' })
   points: number;

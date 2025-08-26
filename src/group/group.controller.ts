@@ -8,11 +8,20 @@ import { Team } from 'src/teams/team.entity';
 export class GroupController {
   constructor(private readonly groupService:GroupService) {}
 
+  @Get('details/:id')
+  @ApiOperation({ summary: 'Pobierz szczegóły grupy' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID grupy ligowej' })
+  async getGroup(@Param('id') id: string) {
+    const numericId = parseInt(id, 10);
+    return this.groupService.getGroupDetails(numericId);
+  }
+
+
   @Get(':id')
   @ApiOperation({ summary: 'Pobierz grupę po ID (z drużynami i sezonem)' })
   @ApiParam({ name: 'id', type: Number })
   async getGroupById(@Param('id') id:number):Promise<Group | null>{
-    return this.groupService.getGroupById(Number(id));
+    return this.groupService.getGroupById(+id);
   }
 
   @Get('filter')
@@ -51,4 +60,18 @@ export class GroupController {
   ):Promise<Team[]>{
     return this.groupService.filterByLigaOkregGrupa(liga,okreg,grupa)
   }
+
+
+  @Get('by-group')
+  @ApiQuery({ name: 'groupId', required: true })
+  async getTeamsByGroup(@Query('groupId') groupId: number): Promise<Team[]> {
+    const group = await this.groupService.getGroupById(+groupId);
+    if (!group) return [];
+    return group.teams; 
+  }
+
+
+  
+
+  
 }

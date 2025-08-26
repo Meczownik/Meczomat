@@ -15,10 +15,10 @@ export class MatchController {
   }
 
   @Get('team/:teamId')
-@ApiOperation({ summary: "Pobierz wszystkie mecze dla konkretnej drużyny" })
-async findByTeam(@Param('teamId') teamId: string): Promise<Match[]> {
-  return this.matchService.findByTeam(+teamId);
-}
+  @ApiOperation({ summary: "Pobierz wszystkie mecze dla konkretnej drużyny" })
+  async findByTeam(@Param('teamId') teamId: string): Promise<Match[]> {
+    return this.matchService.findByTeam(+teamId);
+  }
 
   @Get(':id')
   @ApiOperation({ summary: 'Pobierz mecz po ID' })

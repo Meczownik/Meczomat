@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Group } from './entities/group.entity';
@@ -13,6 +13,27 @@ export class GroupService {
     private readonly teamRepository: Repository<Team>,
   ) {}
 
+  async getGroupDetails(id: number) {
+  const group = await this.groupRepository.findOne({
+    where: { id },
+    select: ['id', 'name', 'league', 'district'],
+  });
+
+  console.log(group);
+
+  if (!group) {
+    throw new NotFoundException(`Nie znaleziono grupy o ID ${id}`);
+  }
+
+  return {
+    league: group.league,
+    district: group.district,
+    groupName: group.name,
+  };
+}
+
+
+
   async getGroupById(id:number): Promise<Group | null> {
     return this.groupRepository.findOne({
       where: { id },
@@ -24,7 +45,7 @@ export class GroupService {
     return this.teamRepository
     .createQueryBuilder('team')
     .innerJoinAndSelect('team.group','lg')
-    .where('LOWER(lg.league = LOWER(:liga)', { liga })
+    .where('LOWER(lg.league) = LOWER(:liga)', { liga })
     .andWhere('LOWER(lg.district) = LOWER(:okreg)', { okreg })
     .getMany();
   }
@@ -57,7 +78,6 @@ export class GroupService {
       .getMany();
   }
 
-
-
+  
 
 }

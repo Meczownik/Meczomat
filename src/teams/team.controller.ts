@@ -9,7 +9,6 @@ import { ApiTags, ApiOperation, ApiQuery, ApiParam } from '@nestjs/swagger';
 export class TeamController {
     constructor(private readonly teamService: TeamService) {}
     
-    
     @Get()
     @ApiOperation({ summary: 'Pobieranie drużyn wraz z opcjonalnym filtorwaniem po nazwie' })
     @ApiQuery({ name: 'name', required: false})
@@ -34,7 +33,7 @@ export class TeamController {
         throw new NotFoundException('Nazwa klubu została niepoprawnie wpisana lub dany klub nie występuje na Dolnym Śląsku');
       }
 
-      return teams;
+      return teams || [];
     }
 
     @Get(':id')

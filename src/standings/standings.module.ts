@@ -12,5 +12,6 @@ import { Team } from 'src/teams/team.entity';
   ],
   controllers: [StandingsController],
   providers: [StandingsService],
+  exports: [StandingsService],
 })
 export class StandingsModule {}

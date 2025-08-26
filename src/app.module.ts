@@ -12,6 +12,7 @@ import { Standing } from './standings/entities/standing.entity';
 import { Match } from './match/entities/match.entity';
 import { Season } from './season/entities/season.entity';
 import { Group } from './group/entities/group.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 //Ładuje zmienne środowiskowe (ConfigModule). 
 // ✔ Łączy się z MySQL (TypeOrmModule.forRoot()). 
 // ✔ Rejestruje encję Team w module (forFeature()). 
@@ -20,6 +21,7 @@ import { Group } from './group/entities/group.entity';
 
 @Module({
   imports: [
+    
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -32,10 +34,11 @@ import { Group } from './group/entities/group.entity';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         entities: [Team, Group, Season, Match, Standing],
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     TypeOrmModule.forFeature([Team, Group, Season, Match, Standing]),
+    ScheduleModule.forRoot(),
     MatchModule,
     StandingsModule,
     GroupModule,

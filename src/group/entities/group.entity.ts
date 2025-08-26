@@ -13,25 +13,15 @@ export class Group {
   @ApiProperty({ description: 'Nazwa grupy, np. Gr. 1' })
   name: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'],
-  })
-  @ApiProperty({ enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'], description: 'Liga' })
-  league: string;
-
-  @Column({
-    type: 'enum',
-    enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'],
-    nullable: true,
-  })
-  @ApiProperty({ enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'], nullable: true, description: 'Okręg' })
+  @Column({ name: 'district', type: 'varchar', length: 50, nullable: true, select: true })
   district: string;
 
   @ManyToOne(() => Season, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'season_id' })
-  @ApiProperty({ description: 'Sezon rozgrywek' })
+  @JoinColumn({ name: 'seasonId' })  
   season: Season;
+
+  @Column({ name: 'league', type: 'varchar', length: 50 })
+  league: string;
 
   @OneToMany(() => Team, (team) => team.group)
   teams: Team[];

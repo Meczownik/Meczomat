@@ -12,22 +12,7 @@ export class Team {
   @ApiProperty({ description: 'Nazwa drużyny' })
   name: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'],
-  })
-  @ApiProperty({ enum: ['Ekstraklasa', 'Okręgówka', 'IV', 'Klasa A', 'Klasa B'], description: 'Liga' })
-  liga: string;
-
-  @Column({
-    type: 'enum',
-    enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'],
-    nullable: true,
-  })
-  @ApiProperty({ enum: ['Wałbrzych', 'Wrocław', 'Jelenia Góra', 'Legnica'], nullable: true, description: 'Okręg' })
-  okreg: string;
-
-  @ManyToOne(() => Group, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => Group, { nullable: true, onDelete: 'SET NULL' ,eager: true})
   @JoinColumn({ name: 'group_id' })
   @ApiProperty({ description: 'Przynależność do grupy w danym sezonie' })
   group: Group;
