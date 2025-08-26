@@ -196,6 +196,7 @@ section {
 }
 
 .search {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -625,20 +626,34 @@ section {
 /*style do wyświetlania podpowiedzi w search*/
 .autocomplete-list {
   position: absolute;
-  border: 1px solid #ccc;
-  color: black;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   background: white;
-  list-style: none;
-  transform: translateX(9px);
-  margin: 0;
-  padding: 0;
-  width: 60%;
+  border: 1px solid #ccc;
+  border-radius: 7px;
   max-height: 200px;
-  border-radius: 8px;
+  width: calc(100% - 20px); 
+  width: 100%;
   overflow-y: auto;
   z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.autocomplete-list:empty {
   display: none;
 }
+.autocomplete-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background-color: #f0f0f0;
+}
+
 
 ::-webkit-scrollbar {
   width: 8px; /* ważne! definiuje widoczność */
@@ -652,14 +667,6 @@ section {
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 8px;
-}
-.autocomplete-list li {
-  padding: 8px;
-  cursor: pointer;
-}
-
-.autocomplete-list li:hover {
-  background-color: #f0f0f0;
 }
 
 /* Hero */

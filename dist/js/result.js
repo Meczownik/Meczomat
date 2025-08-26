@@ -1,157 +1,55 @@
-let loadedTeamsR = [];
-
 $(function () {
   const params = new URLSearchParams(window.location.search);
-  const liga = params.get("liga")?.trim();
-  const okreg = params.get("okreg")?.trim();
-  const grupa = params.get("grupa")?.trim();
-
+  const groupId = params.get("groupId"); 
   const $tbody = $(".league-table tbody");
-  const $input = $('#teamSearchInput');
-  const $error = $('#teamSearchError');
-  const $resultsSection2 = $('#searchResults2');
-  const $autocompleteList = $('#autocompleteList'); 
 
-  if (!liga || !okreg || !grupa) {
-    $tbody.html("<tr><td colspan='6'>Brakuje parametrów w URL (liga, okręg lub grupa).</td></tr>");
+  if (!groupId) {
+    console.warn("Brakuje parametru groupId w URL.");
     return;
   }
 
-  const fetchUrl = `http://localhost:3000/teams/filter-extended?liga=${encodeURIComponent(liga)}&okreg=${encodeURIComponent(okreg)}&grupa=${encodeURIComponent(grupa)}`;
-
-  $.getJSON(fetchUrl)
-    .done(teams => {
-      console.log('Pobrane drużyny:', teams);
-      if (!teams.length) {
-        $tbody.html("<tr><td colspan='6'>Brak drużyn dla podanych parametrów.</td></tr>");
-        return;
-      }
-
-      loadedTeamsR = teams;
-      renderTable(teams);
+  $.getJSON(`http://localhost:3000/group/details/${groupId}`)
+    .done(group => {
+      $('#leagueName').text(group.league);
+      $('#regionName').text(group.district);
+      $('#groupName').text(group.groupName);
     })
     .fail(() => {
-      $tbody.html("<tr><td colspan='6'>Błąd podczas pobierania danych z serwera.</td></tr>");
+      console.warn('Nie udało się pobrać szczegółów grupy');
     });
 
 
 
     
- function renderTable(teams) {
-  const rows = teams.map((team, i) => `
-    <tr class="team-row" data-id="${team.id ?? team.Id}">
-      <td>${i + 1}</td>
-      <td>${team.Nazwa}</td>
-      <td>${team.liga}</td>
-      <td>${team.okreg}</td>
-      <td>${team.punkty ?? '-'}</td>
-      <td>${team.rozegrane_mecze ?? '-'}</td>
-    </tr>`).join('');
-  $tbody.html(rows);
-<<<<<<< HEAD
-}
+  $.getJSON(`http://localhost:3000/standings/${groupId}`)
+    .done(data => {
+      if (!data.length) {
+        $tbody.html("<tr><td colspan='7'>Brak wyników dla tej grupy.</td></tr>");
+        return;
+      }
+      renderTable(data);
+    })
+    .fail(() => {
+      $tbody.html("<tr><td colspan='7'>Błąd podczas pobierania danych z serwera.</td></tr>");
+    });
 
-$tbody.on('click', '.team-row', function () {
-  const teamid = $(this).data('id');
-  if (teamid) {
-    window.location.href = `team_results.html?id=${teamid}`;
-  }
-});
-
-
-
-  function searchTeams() {
-  const query = $input.val().trim().toLowerCase();
-  $error.text('');
-
-  if (!query) {
-    renderTable(loadedTeamsR);
-    return;
+  function renderTable(data) {
+    const rows = data.map(s => `
+      <tr class="team-row" data-id="${s.team.id}">
+        <td>${s.team.name}</td>
+        <td>${s.points}</td>
+        <td>${s.goalsFor}</td>
+        <td>${s.goalsAgainst}</td>
+        <td>${s.goalDifference}</td>
+      </tr>
+    `).join('');
+    $tbody.html(rows);
   }
 
-  if (!loadedTeamsR.length) {
-    $error.text('Brak załadowanych drużyn do przeszukania.');
-    return;
-  }
-
-  const filtered = loadedTeamsR.filter(team =>
-    team.Nazwa.toLowerCase().includes(query)
-  );
-
-  if (!filtered.length) {
-    $error.text('Nie znaleziono takiej drużyny w wybranej lidze, okręgu i grupie.');
-    return;
-  }
-
-  renderTable(filtered);
-=======
->>>>>>> refs/remotes/origin/feature/results-integration
-}
-
-$tbody.on('click', '.team-row', function () {
-  const teamid = $(this).data('id');
-  if (teamid) {
-    window.location.href = `team_results.html?id=${teamid}`;
-  }
-});
-
-function hideAutocomplete() {
-  $autocompleteList.empty().hide();
-}
-
-$input.on('input', async function () {
-  const query = $input.val().trim();
-  $error.text('');
-  $autocompleteList.empty().hide();
-
-  if (!query) return;
-
-  try {
-    const res = await fetch(`http://localhost:3000/teams/search?name=${encodeURIComponent(query)}`);
-    const data = await res.json();
-
-    if (!res.ok) {
-      $error.text(data.message || 'Błąd podczas wyszukiwania.');
-      return;
+  $tbody.on('click', '.team-row', function () {
+    const teamId = $(this).data('id');
+    if (teamId) {
+      window.location.href = `team_results.html?id=${teamId}`;
     }
-
-    if (data.length > 0) {
-      data.forEach(team => {
-        const item = $(`
-          <li class="autocomplete-item" style="cursor:pointer;">
-            <strong>${team.Nazwa}</strong> - ${team.liga} - ${team.okreg}
-          </li>
-        `);
-
-        item.on('click', () => {
-          window.location.href = `/team_results.html?id=${team.id}`;
-        });
-
-        $autocompleteList.append(item);
-      });
-
-      $autocompleteList.show();
-      $resultsSection2?.show(); // opcjonalnie
-    } else {
-      $autocompleteList.hide();
-      $resultsSection2?.hide();
-    }
-  } catch (err) {
-    console.error(err);
-    $error.text('Błąd połączenia z serwerem.');
-  }
-});
-
-$input.on('keydown', function (e) {
-  if ((e.which === 13 || e.key === 'Enter') && $autocompleteList.children().length > 0) {
-    e.preventDefault();
-    $autocompleteList.children().first().click();
-  }
-});
-
-$(document).on('click', function (e) {
-  if (!$(e.target).closest('#teamSearchInput, #autocompleteList').length) {
-    hideAutocomplete();
-  }
-});
+  });
 });

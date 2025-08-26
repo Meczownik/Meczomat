@@ -72,18 +72,11 @@
         </section>
 
         <!--Sekcja ładowania druzyn z search-->
-        <div style="color: white;">
         <section class="search">
             <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
-            <button id="teamSearchBtn">Szukaj</button>
+            <ul id="autocompleteList" class="autocomplete-list"></ul>
             <div id="teamSearchError" class="error-message"></div>
         </section>
-
-        <section id="searchResults" class="search-results" style="display: none; margin-top: 20px;">
-            <h3>Wyniki wyszukiwania:</h3>
-            <ul id="teamResultsList"></ul>
-        </section>
-        </div>
         <!--koniec sekcji ładowania druzyn z search-->
 
         <!--Sekcja wyboru transmisji-->
@@ -163,5 +156,7 @@
                 </div>
             </div>
     </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../../../dist/js/main.js"></script>
 </body>
 </html>

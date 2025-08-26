@@ -114,69 +114,6 @@ $(document).ready(function(){
     });
 });
 
-/*
-// Przykładowe dane results table
-const sampleData = [
-    {
-        position: 1,
-        league: "Ekstraklasa",
-        team: "Legia Warszawa",
-        difference: 8,
-        points: 29
-    },
-    {
-        position: 2,
-        league: "Ekstraklasa",
-        team: "Lech Poznań",
-        difference: 12,
-        points: 24
-    },
-    {
-        position: 3,
-        league: "Ekstraklasa",
-        team: "Przykładowy team",
-        difference: 10,
-        points: 8
-    },
-    {
-        position: 4,
-        league: "Ekstraklasa",
-        team: "Przykładowy team",
-        difference: 10,
-        points: 8
-    },
-    {
-        position: 5,
-        league: "Ekstraklasa",
-        team: "Przykładowy team",
-        difference: 10,
-        points: 8
-    },
-    // wincyj timków
-];
-*/
-function populateTable(data) {
-    const tbody = document.querySelector('.league-table tbody');
-    tbody.innerHTML = '';
-    
-    data.forEach(team => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${team.position}</td>
-            <td>${team.league}</td>
-            <td class="team-name">${team.team}</td>
-            <td>${team.difference}</td>
-            <td><strong>${team.points}</strong></td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    populateTable(sampleData);
-});
-
-
 // Wyszukiwarka drużyn section search w jquery
 const API_BASE = 'http://localhost:3000';
 
@@ -192,7 +129,7 @@ $(document).ready(function () {
   input.on('input', async function () {
     const name = input.val().trim();
     errorDiv.text('');
-    autocompleteList.empty().hide();
+    hideAutocomplete();
 
     if (!name) return;
 
@@ -208,12 +145,8 @@ $(document).ready(function () {
       if (data.length > 0) {
         data.forEach(team => {
           const item = $(`
-            <li>
-<<<<<<< HEAD
-              <strong>${team.Nazwa}</strong> - ${team.liga}
-=======
-              <strong>${team.Nazwa}</strong> - ${team.liga}</strong> - ${team.okreg}
->>>>>>> refs/remotes/origin/feature/results-integration
+            <li class="autocomplete-item">
+              <strong>${team.name}</strong>}
             </li>
           `);
 
@@ -223,7 +156,6 @@ $(document).ready(function () {
 
           autocompleteList.append(item);
         });
-
         autocompleteList.show();
       }
     } catch (err) {
@@ -247,79 +179,34 @@ $(document).ready(function () {
 });
 
 
-
 //obsługa przycisków do results.html
 
-$(document).ready(function () {
-  const buttonConfig = {
-    // OKRĘGÓWKA
-    okregowka_wroclaw:         { liga: 'Okręgówka', okreg: 'Wrocław' },
-    okregowka_walbrzych:       { liga: 'Okręgówka', okreg: 'Wałbrzych' },
-    okregowka_legnica:         { liga: 'Okręgówka', okreg: 'Legnica' },
-    okregowka_jelenia_gora:    { liga: 'Okręgówka', okreg: 'Jelenia Góra' },
+$(document).ready(function() {
+  $('.group-btn').on('click', async function() {
+    const groupId = $(this).data('group-id');
+    const container = $('#groupTeamsContainer');
+    container.empty();
 
-    // A-KLASA
-    a_wroclaw_gr1:             { liga: 'Klasa A', okreg: 'Wrocław', grupa: 'Gr. 1' },
-    a_wroclaw_gr2:             { liga: 'Klasa A', okreg: 'Wrocław', grupa: 'Gr. 2' },
-    a_wroclaw_gr3:             { liga: 'Klasa A', okreg: 'Wrocław', grupa: 'Gr. 3' },
-    a_wroclaw_gr4:             { liga: 'Klasa A', okreg: 'Wrocław', grupa: 'Gr. 4' },
-    a_walbrzych_gr1:           { liga: 'Klasa A', okreg: 'Wałbrzych', grupa: 'Gr. 1' },
-    a_walbrzych_gr2:           { liga: 'Klasa A', okreg: 'Wałbrzych', grupa: 'Gr. 2' },
-    a_walbrzych_gr3:           { liga: 'Klasa A', okreg: 'Wałbrzych', grupa: 'Gr. 3' },
-    a_legnica_gr1:             { liga: 'Klasa A', okreg: 'Legnica', grupa: 'Gr. 1' },
-    a_legnica_gr2:             { liga: 'Klasa A', okreg: 'Legnica', grupa: 'Gr. 2' },
-    a_legnica_gr3:             { liga: 'Klasa A', okreg: 'Legnica', grupa: 'Gr. 3' },
-    a_jelenia_gora_gr1:        { liga: 'Klasa A', okreg: 'Jelenia Góra', grupa: 'Gr. 1' },
-    a_jelenia_gora_gr2:        { liga: 'Klasa A', okreg: 'Jelenia Góra', grupa: 'Gr. 2' },
-    a_jelenia_gora_gr3:        { liga: 'Klasa A', okreg: 'Jelenia Góra', grupa: 'Gr. 3' },
+    try {
+      const res = await fetch(`http://localhost:3000/group/${groupId}`);
+      if (!res.ok) throw new Error('Błąd pobierania grupy');
 
-    // B-KLASA 
-    b_walbrzych_gr1:           { liga: 'Klasa B', okreg: 'Wałbrzych', grupa: 'Gr. 1' },
-    b_walbrzych_gr2:           { liga: 'Klasa B', okreg: 'Wałbrzych', grupa: 'Gr. 2' },
-    b_walbrzych_gr3:           { liga: 'Klasa B', okreg: 'Wałbrzych', grupa: 'Gr. 3' },
-    b_walbrzych_gr4:           { liga: 'Klasa B', okreg: 'Wałbrzych', grupa: 'Gr. 4' },
-    b_legnica_gr1:             { liga: 'Klasa B', okreg: 'Legnica', grupa: 'Gr. 1' },
-    b_legnica_gr2:             { liga: 'Klasa B', okreg: 'Legnica', grupa: 'Gr. 2' },
-    b_legnica_gr3:             { liga: 'Klasa B', okreg: 'Legnica', grupa: 'Gr. 3' },
-    b_legnica_gr4:             { liga: 'Klasa B', okreg: 'Legnica', grupa: 'Gr. 4' },
-    b_legnica_gr5:             { liga: 'Klasa B', okreg: 'Legnica', grupa: 'Gr. 5' },
-    b_jelenia_gora_gr1:        { liga: 'Klasa B', okreg: 'Jelenia Góra', grupa: 'Gr. 1' },
-    b_jelenia_gora_gr2:        { liga: 'Klasa B', okreg: 'Jelenia Góra', grupa: 'Gr. 2' },
-    b_jelenia_gora_gr3:        { liga: 'Klasa B', okreg: 'Jelenia Góra', grupa: 'Gr. 3' },
-    b_jelenia_gora_gr4:        { liga: 'Klasa B', okreg: 'Jelenia Góra', grupa: 'Gr. 4' },
-    b_jelenia_gora_gr5:        { liga: 'Klasa B', okreg: 'Jelenia Góra', grupa: 'Gr. 5' },
+      const group = await res.json();
 
-    // IV LIGA
-    iv_liga_dolnoslaskie:      { liga: 'IV', okreg: 'Dolny Śląsk' },
-
-    // EKSTRAKLASA
-    ekstraklasa:               { liga: 'Ekstraklasa' }
-  };
-
-  $.each(buttonConfig, function (id, value) {
-    $('#' + id).on('click', function () {
-      let url = `results.html?liga=${encodeURIComponent(value.liga)}`;
-      if (value.okreg) {
-        url += `&okreg=${encodeURIComponent(value.okreg)}`;
-      }
-      if (value.grupa) {
-        url += `&grupa=${encodeURIComponent(value.grupa)}`;
-      }
-      window.location.href = url;
-    });
+      container.append(`<h2>${group.league} - ${group.district} - ${group.name}</h2>`);
+      const ul = $('<ul></ul>');
+      group.teams.forEach(team => {
+        ul.append(`<li>${team.name}</li>`);
+      });
+      container.append(ul);
+    } catch(err) {
+      console.error(err);
+      container.text('Nie udało się pobrać drużyn dla tej grupy.');
+    }
   });
 });
 
-
-$(document).ready(function () {
-  $('#lowerLeaguesBtn').on('click', function (e) {
-    e.preventDefault();
-    const $target = $('.map-section');
-    if ($target.length) {
-      $('html, body').animate({
-        scrollTop: $target.offset().top - 300// opcjonalnie odejmij padding/header
-      }, 200); // czas animacji w ms
-    }
-  });
+$('.group-btn').on('click', function() {
+    const groupId = $(this).data('group-id');
 });
 

@@ -53,19 +53,23 @@
     <main>
         
         <!-- Sekcja ładowania drużyn z autocomplete -->
-        <div style="color: white;">
-            <section class="search" style="position: relative;">
-                <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ" autocomplete="off">
-                <ul id="autocompleteList" class="autocomplete-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; color: black; z-index: 9999; list-style: none; margin: 0; padding: 0; border: 1px solid #ccc;"></ul>
-                <div id="teamSearchError" class="error-message" style="color: red;"></div>
-            </section>
-        </div>
+        <section class="search">
+            <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
+            <ul id="autocompleteList" class="autocomplete-list"></ul>
+            <div id="teamSearchError" class="error-message"></div>
+        </section>
         <!-- Koniec sekcji -->
 
         <section class="sponsor">
             <div class="sponsor-placeholder">MIEJSCE DLA POTENCJALNEGO SPONSORA</div>
         </section>
 
+        <section id="teamInfo" class="team-info" style="color: white; font-size: large;">
+            <p><strong>Nazwa:</strong> <span id="teamName">-</span></p>
+            <p><strong>Liga:</strong> <span id="teamLiga">-</span></p>
+            <p><strong>Okręg:</strong> <span id="teamOkreg">-</span></p>
+            <p><strong>Grupa:</strong> <span id="teamGrupa">-</span></p>
+        </section>
 
         <section class="results_table">
             <div class="table-container">
@@ -74,12 +78,12 @@
                     <table class="league-table">
                         <thead>
                             <tr>
-                                <th>Poz</th>
-                                <th>Nazwa drużyny</th>
-                                <th>Liga</th>
-                                <th>Okręg</th>
-                                <th>Pkt</th>
-                                <th>Rozegrane mecze</th>
+                                <th>Pozycja</th>
+                                <th>Drużyna</th>
+                                <th>Punkty</th>
+                                <th>Bramki zdobyte</th>
+                                <th>Bramki stracone</th>
+                                <th>Bilans</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -104,10 +108,9 @@
                         <thead>
                             <tr>
                                 <th>Data</th>
-                                <th>Drużyna 1</th>
+                                <th>Gospodarz</th>
                                 <th>Wynik</th>
-                                <th>Drużyna 2</th>
-                                <th>Liga</th>
+                                <th>Gość</th>
                             </tr>
                         </thead>
                         <tbody id="teamResultsBody">
@@ -175,6 +178,5 @@
         </div>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
- 
 </body>
 </html>

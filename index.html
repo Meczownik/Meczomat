@@ -73,19 +73,12 @@
         </section>
 
         <!--Sekcja ładowania druzyn z search-->
-        <div style="color: white;">
         <section class="search">
             <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
-            <button id="teamSearchBtn">Szukaj</button>
+            <ul id="autocompleteList" class="autocomplete-list"></ul>
             <div id="teamSearchError" class="error-message"></div>
         </section>
 
-        <section id="searchResults" class="search-results" style="display: none; margin-top: 20px;">
-            <h3>Wyniki wyszukiwania:</h3>
-            <ul id="teamResultsList"></ul>
-        </section>
-        </div>
-        <!--koniec sekcji ładowania druzyn z search-->
 
         <section class="map-section">   
             <div class="map-container" id="map-container" style="position: relative; display: inline-block;">
@@ -345,50 +338,48 @@
             <h1>Dolny Śląsk</h1>
 
             <!-- IV liga -->
-            <a href="result.html?liga=iv-liga&okreg=dolnoslaskie">
-                <button>IV liga (Dolny Śląsk)</button>
-            </a>
+             <a href="results.html?groupId=2"><button>IV liga (Dolny Śląsk)</button></a>
 
             <!-- OKRĘGÓWKA -->
             <h2>Okręgówka</h2>
-            <button id="okregowka_wroclaw">Wrocław</button>
-            <button id="okregowka_walbrzych">Wałbrzych</button>
-            <button id="okregowka_legnica">Legnica</button>
-            <button id="okregowka_jelenia_gora">Jelenia Góra</button>
+                <a href="results.html?groupId=43"><button>Wrocław</button></a>
+                <a href="results.html?groupId=29"><button>Wałbrzych</button></a>
+                <a href="results.html?groupId=20"><button>Legnica</button></a>
+                <a href="results.html?groupId=11"><button>Jelenia Góra</button></a>
 
             <!-- A-KLASA -->
             <h2>A-klasa</h2>
             <button id="a_wroclaw">Wrocław</button>
             <div id="A-klasa_Wroclaw" class="info-box">
                 <h3>A-klasa Wrocław</h3>
-                <button id="a_wroclaw_gr1">Gr. 1</button>
-                <button id="a_wroclaw_gr2">Gr. 2</button>
-                <button id="a_wroclaw_gr3">Gr. 3</button>
-                <button id="a_wroclaw_gr4">Gr. 4</button>
+                    <a href="results.html?groupId=30"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=31"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=32"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=33"><button>Gr. 4</button></a>
             </div>
 
             <button id="a_walbrzych">Wałbrzych</button>
             <div id="A-klasa_Walbrzych" class="info-box">
                 <h3>A-klasa Wałbrzych</h3>
-                <button id="a_walbrzych_gr1">Gr. 1</button>
-                <button id="a_walbrzych_gr2">Gr. 2</button>
-                <button id="a_walbrzych_gr3">Gr. 3</button>
+                    <a href="results.html?groupId=21"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=22"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=23"><button>Gr. 3</button></a>
             </div>
 
             <button id="a_legnica">Legnica</button>
             <div id="A-klasa_Legnica" class="info-box">
                 <h3>A-klasa Legnica</h3>
-                <button id="a_legnica_gr1">Gr. 1</button>
-                <button id="a_legnica_gr2">Gr. 2</button>
-                <button id="a_legnica_gr3">Gr. 3</button>
+                    <a href="results.html?groupId=12"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=13"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=14"><button>Gr. 3</button></a>
             </div>
 
             <button id="a_jelenia_gora">Jelenia Góra</button>
             <div id="A-klasa_JeleniaGora" class="info-box">
                 <h3>A-klasa Jelenia Góra</h3>
-                <button id="a_jelenia_gora_gr1">Gr. 1</button>
-                <button id="a_jelenia_gora_gr2">Gr. 2</button>
-                <button id="a_jelenia_gora_gr3">Gr. 3</button>
+                    <a href="results.html?groupId=3"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=4"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=5"><button>Gr. 3</button></a>
             </div>
 
             <!-- B-KLASA -->
@@ -396,44 +387,44 @@
             <button id="b_wroclaw">Wrocław</button>
             <div id="B-klasa_Wroclaw" class="info-box">
                 <h3>B-klasa Wrocław</h3>
-                <button id="b_wroclaw_gr1">Gr. 1</button>
-                <button id="b_wroclaw_gr2">Gr. 2</button>
-                <button id="b_wroclaw_gr3">Gr. 3</button>
-                <button id="b_wroclaw_gr4">Gr. 4</button>
-                <button id="b_wroclaw_gr5">Gr. 5</button>
-                <button id="b_wroclaw_gr6">Gr. 6</button>
-                <button id="b_wroclaw_gr7">Gr. 7</button>
-                <button id="b_wroclaw_gr8">Gr. 8</button>
-                <button id="b_wroclaw_gr9">Gr. 9</button>
+                    <a href="results.html?groupId=34"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=35"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=36"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=37"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=38"><button>Gr. 5</button></a>
+                    <a href="results.html?groupId=39"><button>Gr. 6</button></a>
+                    <a href="results.html?groupId=40"><button>Gr. 7</button></a>
+                    <a href="results.html?groupId=41"><button>Gr. 8</button></a>
+                    <a href="results.html?groupId=42"><button>Gr. 9</button></a>
             </div>
             <button id="b_walbrzych">Wałbrzych</button>
             <div id="B-klasa_Walbrzych" class="info-box">
                 <h3>B-klasa Wałbrzych</h3>
-                <button id="b_walbrzych_gr1">Gr. 1</button>
-                <button id="b_walbrzych_gr2">Gr. 2</button>
-                <button id="b_walbrzych_gr3">Gr. 3</button>
-                <button id="b_walbrzych_gr4">Gr. 4</button>
-                <button id="b_walbrzych_gr5">Gr. 5</button>
+                    <a href="results.html?groupId=24"><button>Gr. 1</button></a>
+                    <a href="resultshtml?groupId=25"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=26"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=27"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=28"><button>Gr. 5</button></a>
             </div>
 
             <button id="b_legnica">Legnica</button>
             <div id="B-klasa_Legnica" class="info-box">
                 <h3>B-klasa Legnica</h3>
-                <button id="b_legnica_gr1">Gr. 1</button>
-                <button id="b_legnica_gr2">Gr. 2</button>
-                <button id="b_legnica_gr3">Gr. 3</button>
-                <button id="b_legnica_gr4">Gr. 4</button>
-                <button id="b_legnica_gr5">Gr. 5</button>
+                    <a href="results.html?groupId=15"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=16"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=17"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=18"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=19"><button>Gr. 5</button></a>
             </div>
 
             <button id="b_jelenia_gora">Jelenia Góra</button>
             <div id="B-klasa_JeleniaGora" class="info-box">
                 <h3>B-klasa Jelenia Góra</h3>
-                <button id="b_jelenia_gora_gr1">Gr. 1</button>
-                <button id="b_jelenia_gora_gr2">Gr. 2</button>
-                <button id="b_jelenia_gora_gr3">Gr. 3</button>
-                <button id="b_jelenia_gora_gr4">Gr. 4</button>
-                <button id="b_jelenia_gora_gr5">Gr. 5</button>
+                    <a href="results.html?groupId=6"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=7"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=9"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=8"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=10"><button>Gr. 5</button></a>
             </div>
             </div>
 
