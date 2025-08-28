@@ -1,203 +1,190 @@
-<<<<<<< HEAD
-$(document).ready(function () {
-  const teamid = getTeamIdFromUrl();
-  if (teamid) {
-    fetchTeamById(teamid);
+$(function () {
+  const params = new URLSearchParams(window.location.search);
+  const teamId = params.get("id");
+  const $tbody = $(".league-table tbody");
+
+  if (!teamId) {
+    $tbody.html("<tr><td colspan='6'>Brakuje parametru id drużyny w URL.</td></tr>");
+    return;
   }
 
-  function getTeamIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
-  }
-
-  function fetchTeamById(id) {
-    $.ajax({
-      url: `http://localhost:3000/teams/${id}`, 
-      method: 'GET',
-      success: function (team) {
-        displayTeamData(team);
-      },
-      error: function () {
-        $('#teamResultsBody').html(
-          `<tr><td colspan="5" style="color:red">Nie znaleziono drużyny o ID ${id}</td></tr>`
-        );
-      }
-    });
-  }
-
-  function displayTeamData(team) {
-  const infoHtml = `
-    <div class="team-summary" style="color: white; margin-bottom: 20px;">
-      <h2>${team.Nazwa || 'Nieznana drużyna'}</h2>
-      <p><strong>Okręg:</strong> ${team.okreg} | <strong>Liga:</strong> ${team.liga}| <strong>Grupa:</strong> ${team.grupa || 'brak'}</p> 
-      
-      <p><strong>Punkty:</strong> ${team.punkty ?? '-'} | <strong>Rozegrane mecze</strong> ${team.rozegrane_mecze ?? '-'} | <strong>Bilans bramkowy:</strong> ${team.strzelone_bramki ?? '-'}-${team.stracone_bramki ?? '-'}</p>
-    </div>
-  `;
-  $('#teamInfo').html(infoHtml);
-
-  const row = `
-    <tr>
-      <td>${team.data || 'brak'}</td>
-      <td>${team.Nazwa || 'brak'}</td>
-      <td>${team.wynik || '-'}</td>
-      <td>${team.rywal || '-'}</td>
-      <td>${team.liga || 'brak'}</td>
-    </tr>
-  `;
-  $('#teamResultsBody').html(row);
-}
-
-});
-=======
-$(document).ready(function () {
-  const teamid = getTeamIdFromUrl();
-  if (teamid) {
-    fetchTeamById(teamid);
-  }
-
-  function getTeamIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
-  }
-
-  function fetchTeamById(id) {
-    $.ajax({
-      url: `http://localhost:3000/teams/${id}`,
-      method: 'GET',
-      success: function (team) {
-        displayTeamData(team);
-        fetchRelatedTeams(team.okreg, team.liga, team.grupa); 
-      },
-      error: function () {
-        $('#teamResultsBody').html(
-          `<tr><td colspan="5" style="color:red">Nie znaleziono drużyny o ID ${id}</td></tr>`
-        );
-      }
-    });
-  }
-
-  function displayTeamData(team) {
-    const infoHtml = `
-      <div class="team-summary" style="color: white; margin-bottom: 20px;">
-        <h2>${team.Nazwa || 'Nieznana drużyna'}</h2>
-        <p><strong>Okręg:</strong> ${team.okreg} | <strong>Liga:</strong> ${team.liga} | <strong>Grupa:</strong> ${team.grupa || 'brak'}</p> 
-        <p><strong>Punkty:</strong> ${team.punkty ?? '-'} | <strong>Rozegrane mecze:</strong> ${team.rozegrane_mecze ?? '-'} | <strong>Bilans bramkowy:</strong> ${team.strzelone_bramki ?? '-'}-${team.stracone_bramki ?? '-'}</p>
-      </div>
-    `;
-    $('#teamInfo').html(infoHtml);
-  }
-
- function fetchRelatedTeams(okreg, liga, grupa) {
-  $.ajax({
-    url: `http://localhost:3000/teams/filter-extended?liga=${encodeURIComponent(liga)}&okreg=${encodeURIComponent(okreg)}&grupa=${encodeURIComponent(grupa)}`,
-    method: 'GET',
-    success: function (teams) {
-      const tableBody = $('.results_table .league-table tbody');
-      tableBody.empty();
-
-      if (!teams.length) {
-        tableBody.append('<tr><td colspan="6">Brak drużyn w tej samej grupie.</td></tr>');
+  $.getJSON(`http://localhost:3000/teams/${teamId}`)
+    .done(team => {
+      if (!team) {
+        $tbody.html(`<tr><td colspan='6'>Nie znaleziono drużyny o ID ${teamId}</td></tr>`);
         return;
       }
 
-      teams.sort((a, b) => (b.punkty ?? 0) - (a.punkty ?? 0));
-
-      const rows = teams.map((team, i) => `
-        <tr class="clickable-row" data-id="${team.id}">
-          <td>${i + 1}</td>
-          <td>${team.Nazwa}</td>
-          <td>${team.liga}</td>
-          <td>${team.okreg}</td>
-          <td>${team.punkty ?? '-'}</td>
-          <td>${team.rozegrane_mecze ?? '-'}</td>
-        </tr>
-      `).join('');
-
-      tableBody.html(rows);
-    },
-    error: function () {
-      $('.results_table .league-table tbody').html('<tr><td colspan="6" style="color:red">Błąd podczas ładowania danych tabeli wyników.</td></tr>');
-    }
-  });
-}
-
-$('.results_table .league-table tbody').on('click', '.clickable-row', function() {
-  const teamId = $(this).data('id');
-  if (teamId) {
-    window.location.href = `team_results.html?id=${teamId}`;
-  }
-});
+      $('#teamName').text(team.name || '-');
+      $('#teamLiga').text(team.group?.league || '-');
+      $('#teamOkreg').text(team.group?.district || '-');
+      $('#teamGrupa').text(team.group?.name || '-');
 
 
+      const groupId = team.group?.id;
 
-// wyszukiwarka sekcja 
+      if (!groupId) {
+        $tbody.html("<tr><td colspan='6'>Nie znaleziono grupy dla tej drużyny.</td></tr>");
+        return;
+      }
 
-const $input = $('#teamSearchInput');
-const $autocompleteList = $('#autocompleteList');
-const $error = $('#teamSearchError');
-
-function hideAutocomplete() {
-  $autocompleteList.empty().hide();
-}
-
-$input.on('input', async function () {
-  const query = $input.val().trim();
-  $error.text('');
-  $autocompleteList.empty().hide();
-
-  if (!query) return;
-
-  try {
-    const res = await fetch(`http://localhost:3000/teams/search?name=${encodeURIComponent(query)}`);
-    const data = await res.json();
-
-    if (!res.ok) {
-      $error.text(data.message || 'Błąd podczas wyszukiwania.');
-      return;
-    }
-
-    if (data.length > 0) {
-      data.forEach(team => {
-        const item = $(`
-          <li class="autocomplete-item" style="padding: 8px 12px; cursor: pointer;">
-            <strong>${team.Nazwa}</strong> - ${team.liga} - ${team.okreg}
-          </li>
-        `);
-
-        item.on('click', () => {
-          window.location.href = `/team_results.html?id=${team.id}`;
+    
+      $.getJSON(`http://localhost:3000/standings/${groupId}`)
+        .done(data => {
+          if (!data.length) {
+            $tbody.html("<tr><td colspan='6'>Brak wyników dla tej grupy.</td></tr>");
+            return;
+          }
+          renderTable(data);
+        })
+        .fail(() => {
+          $tbody.html("<tr><td colspan='6'>Błąd podczas pobierania danych z serwera.</td></tr>");
         });
 
-        $autocompleteList.append(item);
-      });
+    })
+    .fail(() => {
+      $tbody.html(`<tr><td colspan='6'>Błąd podczas pobierania danych drużyny o ID ${teamId}</td></tr>`);
+    });
 
-      $autocompleteList.show();
-    } else {
+  function renderTable(data) {
+  const rows = data.map((s, index) => `
+    <tr class="team-row" data-id="${s.team.id}">
+      <td>${index + 1}</td>   <!-- tutaj numer miejsca -->
+      <td>${s.team.name}</td>
+      <td>${s.points}</td>
+      <td>${s.goalsFor}</td>
+      <td>${s.goalsAgainst}</td>
+      <td>${s.goalDifference}</td>
+    </tr>
+  `).join('');
+  $tbody.html(rows);
+}
+
+  $tbody.on('click', '.team-row', function () {
+    const teamId = $(this).data('id');
+    if (teamId) {
+      window.location.href = `team_results.html?id=${teamId}`;
+    }
+  });
+});
+
+
+
+//Tabela z meczami danej drużyny 
+$(function () {
+  const params = new URLSearchParams(window.location.search);
+  const teamId = params.get("id");
+  const $tbody = $("#teamResultsBody");
+
+  if (!teamId) {
+    $tbody.html("<tr><td colspan='4'>Brakuje parametru id drużyny w URL.</td></tr>");
+    return;
+  }
+
+  $.getJSON(`http://localhost:3000/matches/team/${teamId}`)
+    .done(matches => {
+      console.log(matches);
+
+      if (!matches || !matches.length) {
+        $tbody.html("<tr><td colspan='4'>Brak meczów dla tej drużyny.</td></tr>");
+        return;
+      }
+
+      const rows = matches.map(m => {
+      const team1 = m.homeTeam?.name || "-";
+      const team2 = m.awayTeam?.name || "-";
+      const wynik = (m.homeGoals != null && m.awayGoals != null)
+        ? `${m.homeGoals} : ${m.awayGoals}`
+        : "-";
+
+      return `
+      <tr>
+        <td>${
+          new Date(m.matchDate).toLocaleString("pl-PL", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        }</td>
+        <td>${team1}</td>
+        <td>${wynik}</td>
+        <td>${team2}</td>
+      </tr>
+      `;
+      }).join("");
+
+      $tbody.html(rows);
+    })
+    .fail(() => {
+      $tbody.html("<tr><td colspan='4'>Błąd podczas pobierania meczów.</td></tr>");
+    });
+});
+
+
+// Wyszukiwarka drużyn
+const API_BASE = 'http://localhost:3000';
+
+$(document).ready(function () {
+  const input = $('#teamSearchInput');
+  const errorDiv = $('#teamSearchError');
+  const autocompleteList = $('#autocompleteList');
+
+  function hideAutocomplete() {
+    autocompleteList.empty().hide();
+  }
+
+  input.on('input', async function () {
+    const name = input.val().trim();
+    errorDiv.text('');
+    hideAutocomplete();
+    if (!name) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/teams/search?name=${encodeURIComponent(name)}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorDiv.text(data.message || 'Błąd podczas wyszukiwania.');
+        return;
+      }
+
+      if (data.length > 0) {
+        data.forEach(team => {
+          const league = team.group ? team.group?.league : '';
+          const district = team.group ? team.group?.district : '';
+
+          const item = $(`
+          <li class="autocomplete-item">
+            <strong>${team.name}</strong>
+          </li>
+          `);
+
+          item.on('click', () => {
+            window.location.href = `/team_results.html?id=${team.id}`;
+          });
+
+        autocompleteList.append(item);
+        });
+        autocompleteList.show();
+      }
+    } catch (err) {
+      console.error(err);
+      errorDiv.text('Błąd połączenia z serwerem.');
+    }
+  });
+
+  input.on('keydown', function (e) {
+    if ((e.which === 13 || e.key === 'Enter') && autocompleteList.children().length > 0) {
+      e.preventDefault();
+      autocompleteList.children().first().click();
+    }
+  });
+
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('#teamSearchInput, #autocompleteList').length) {
       hideAutocomplete();
     }
-  } catch (err) {
-    console.error(err);
-    $error.text('Błąd połączenia z serwerem.');
-  }
+  });
 });
-
-$input.on('keydown', function (e) {
-  if ((e.which === 13 || e.key === 'Enter') && $autocompleteList.children().length > 0) {
-    e.preventDefault();
-    $autocompleteList.children().first().click();
-  }
-});
-
-$(document).on('click', function (e) {
-  if (!$(e.target).closest('#teamSearchInput, #autocompleteList').length) {
-    hideAutocomplete();
-  }
-});
-
-
-});
-
-
-
->>>>>>> refs/remotes/origin/feature/results-integration
