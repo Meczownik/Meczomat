@@ -69,7 +69,7 @@ nav h3 {
 }
 
 .nav__left img {
-    height: 6em;
+    height: 5em;
     margin: 10px;
 }
 
@@ -231,19 +231,11 @@ section {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    font-size: 1.2rem;
 }
 
 #teamSearchBtn:hover {
     background-color: #00b37a;
-}
-
-#teamSearchBtn::before {
-    content: url('./dist/images/search-icon.svg'); /* Ścieżka do ikony lupy */
-    display: inline-block;
-    margin-right: 5px;
-    width: 16px;
-    height: 16px;
-    filter: invert(1); /* Dopasowanie koloru ikony do tła */
 }
 
 .map-section {
@@ -739,7 +731,7 @@ section {
     z-index: 1;
 }
 
-/* Sekcja wyboru transmisji */
+/* Sekcja wyboru skrótów */
 .transmission-selection {
     padding: 40px;
     background-color: #002612;
@@ -769,7 +761,7 @@ section {
     background-color: #003726;
     border-radius: 20px;
     overflow: hidden;
-    width: 400px;
+    width: 1080px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -777,12 +769,6 @@ section {
 .transmission-option:hover {
     transform: translateY(-10px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-}
-
-.transmission-option img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
 }
 
 .transmission-option p {
@@ -862,10 +848,259 @@ main h2::after {
 
 .youtube-section iframe {
     width: 100%;
-    height: 450px;
+    height: 720px;
     margin: 20px auto;
     display: block;
     border: 4px solid #4dffc3;
     border-radius: 10px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #003726;
+    list-style: none;
+    padding: 10px 0;
+    margin: 5px 0 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 20px;
+    display: block;
+    white-space: nowrap;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f0f0f000;
+}
+
+.dropdown-menu li a:hover {
+    color: #007BFF;
+}
+
+/* Styl dla przycisku */
+.dropdown-btn {
+    background-color: #007bff00; /* Niebieski */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-btn:hover {
+    background-color: #0056b3; /* Ciemniejszy niebieski */
+}
+
+/* Styl dla kontenera dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Pokaż menu po najechaniu */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+.parent {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 20px;
+    padding: 40px;
+    background-color: #002612;
+    color: white;
+    text-align: center;
+    margin-top: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Styl dla obrazków */
+.parent img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efekt powiększenia obrazka */
+.parent img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Styl dla tekstu h1 */
+.parent div {
+    position: relative;
+}
+
+.parent div h1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: white;
+    font-size: 1.7rem;
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); /* Stopniowe wyciemnienie */
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+    pointer-events: none; /* Zapobiega klikaniu w tekst */
+}
+
+/* Styl dla poszczególnych divów */
+.div1 {
+    grid-column: span 8 / span 8;
+    grid-row: span 4 / span 4;
+}
+
+.div2 {
+    grid-column: span 4 / span 4;
+    grid-row: span 4 / span 4;
+    grid-column-start: 1;
+    grid-row-start: 5;
+}
+
+.div3 {
+    grid-column: span 6 / span 6;
+    grid-row: span 4 / span 4;
+    grid-column-start: 5;
+    grid-row-start: 5;
+}
+
+.div4 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 9;
+    grid-row-start: 1;
+}
+
+.div5 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 9;
+    grid-row-start: 3;
+}
+
+.div6 {
+    grid-column: span 4 / span 4;
+    grid-row: span 2 / span 2;
+    grid-row-start: 9;
+}
+
+.div7 {
+    grid-column: span 4 / span 4;
+    grid-row: span 2 / span 2;
+    grid-column-start: 5;
+    grid-row-start: 9;
+}
+
+.div8 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 9;
+    grid-row-start: 9;
+}
+
+/* Styl dla sekcji formularza */
+.contact_form {
+    background-color: #002612; /* Jasne tło */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Delikatny cień */
+    max-width: 600px;
+    margin: 40px auto; /* Wyśrodkowanie */
+    text-align: center;
+}
+
+/* Styl dla nagłówków */
+.contact_form h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.contact_form h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Styl dla etykiet */
+.contact_form label {
+    display: block;
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* Styl dla pól tekstowych */
+.contact_form input[type="text"],
+.contact_form input[type="email"],
+.contact_form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.contact_form input[type="text"]:focus,
+.contact_form input[type="email"]:focus,
+.contact_form textarea:focus {
+    border-color: #007BFF; /* Niebieski kolor na focus */
+    outline: none;
+}
+
+/* Styl dla przycisku */
+.contact_form button {
+    background-color: #007BFF; /* Niebieski */
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.contact_form button:hover {
+    background-color: #0056b3; /* Ciemniejszy niebieski */
+    transform: scale(1.05); /* Powiększenie przycisku */
+}
+
+/* Styl dla tekstu w polach */
+.contact_form textarea {
+    resize: none; /* Wyłączenie zmiany rozmiaru */
 }

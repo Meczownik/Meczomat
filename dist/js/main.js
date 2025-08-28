@@ -322,4 +322,29 @@ $(document).ready(function () {
     }
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdownBtn = document.querySelector('.dropdown-btn');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+
+    dropdownBtn.addEventListener('click', () => {
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Opcjonalnie: zamknij menu po kliknięciu poza nim
+    document.addEventListener('click', (e) => {
+        if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollToShortcutsBtn = document.querySelector('a[href="#news"]');
+    const youtubeSection = document.querySelector('.youtube-section');
+
+    scrollToShortcutsBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Zapobiega domyślnemu zachowaniu linku
+        youtubeSection.scrollIntoView({ behavior: 'smooth' }); // Płynne przewijanie
+    });
+});
 

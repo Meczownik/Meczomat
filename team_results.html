@@ -25,11 +25,20 @@
             </div>
             <div class="nav__center">
                 <ul class="nav__list">
-                    <li><a href="">TRANSMISJE</a></li>
-                    <li><a href="#news">NEWSY</a></li>
+                    <li><a href="dist/subpages/transmisje.html">TRANSMISJE</a></li>
+                    <li><a href="#news">SKRÓTY</a></li>
                     <li><a href="">EKSTRAKLASA</a></li>
                     <li><a href="">1-LIGA</a></li>
-                    <li><a href="">NIŻSZE LIGI</a></li>
+                    <li class="dropdown">
+                        <button class="dropdown-btn">&#x25BC;</button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">2 liga</a></li>
+                            <li><a href="#">3 liga gr1</a></li>
+                            <li><a href="#">3 liga gr2</a></li>
+                            <li><a href="#">3 liga gr3</a></li>
+                            <li><a href="#">3 liga gr4</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="nav__right">
@@ -56,6 +65,7 @@
         <div style="color: white;">
             <section class="search" style="position: relative;">
                 <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ" autocomplete="off">
+                            <button id="teamSearchBtn">Szukaj</button>
                 <ul id="autocompleteList" class="autocomplete-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; color: black; z-index: 9999; list-style: none; margin: 0; padding: 0; border: 1px solid #ccc;"></ul>
                 <div id="teamSearchError" class="error-message" style="color: red;"></div>
             </section>
@@ -118,23 +128,41 @@
             </div>
         </section>
 
-        <section class="highlights">
-            <h3>NAJCIEKAWSZE SKRÓTY</h3>
-            <div class="highlight-items">
-                <div class="highlight-item">Orzeł 3:0 Lechia</div>
-                <div class="highlight-item">Orzeł 3:0 Lechia</div>
-                <div class="highlight-item">Orzeł 3:0 Lechia</div>
+<section class="youtube-section">
+            <section class="transmission-selection">
+            <h2>Zobacz ciekawe skróty</h2>
+            <div class="transmission-options">
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/8Z1a2b3c4d5?si=example" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 1</p>
+                    <button class="watch-btn">Obejrzyj</button>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/8Z1a2b3c4d5?si=example" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 2</p>
+                    <button class="watch-btn">Obejrzyj</button>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/8Z1a2b3c4d5?si=example" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 3</p>
+                    <button class="watch-btn">Obejrzyj</button>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/8Z1a2b3c4d5?si=example" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 4</p>
+                    <button class="watch-btn">Obejrzyj</button>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/8Z1a2b3c4d5?si=example" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 5</p>
+                    <button class="watch-btn">Obejrzyj</button>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/8Z1a2b3c4d5?si=example" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 6</p>
+                    <button class="watch-btn">Obejrzyj</button>
+                </div>
             </div>
-        </section>
-        
-        <section id="news" class="news">
-            <h3>NAJCIEKAWSZE NEWSY</h3>
-            <div class="news-items">
-                <div class="news-item">Nagłówek</div>
-                <div class="news-item">Nagłówek</div>
-                <div class="news-item">Nagłówek</div>
-            </div>
-        </section>
     </main>
     <footer class="main-footer">
         <div class="footer-content">
