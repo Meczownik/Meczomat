@@ -235,3 +235,26 @@ $('.group-btn').on('click', function() {
     const groupId = $(this).data('group-id');
 });
 
+$(document).ready(function () {
+  $('#lowerLeaguesBtn').on('click', function (e) {
+    e.preventDefault();
+    const $target = $('.map-section');
+    if ($target.length) {
+      $('html, body').animate({
+        scrollTop: $target.offset().top - 300// opcjonalnie odejmij padding/header
+      }, 200); // czas animacji w ms
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const navCenter = document.querySelector('.nav__center');
+    const navRight = document.querySelector('.nav__right');
+
+    hamburgerMenu.addEventListener('click', () => {
+        hamburgerMenu.classList.toggle('active');
+        navCenter.classList.toggle('active');
+        navRight.classList.toggle('active');
+    });
+});
