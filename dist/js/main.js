@@ -1,7 +1,15 @@
 $(document).ready(function(){
     $(".info-box").hide();
+});
 
-    // Tablica z parami: [przycisk, box do pokazania]
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('dist/images/POL_location_map.svg')
+        .then(res => res.text())
+        .then(svg => {
+            document.getElementById('map-container').innerHTML = svg;
+
+            // Po załadowaniu SVG podpinamy eventy
+            // Tablica z parami: [przycisk, box do pokazania]
     const pairs = [
 
         //Zachodnio-Pomorskie
@@ -104,14 +112,20 @@ $(document).ready(function(){
         ["#b_krosno", "#B-klasa_Krosno"],
         ["#b_rzeszow", "#B-klasa_Rzeszow"],
         ["#b_stalowa-wola", "#B-klasa_Stalowa-Wola"]
-    ];
-
-    pairs.forEach(([btn, box]) => {
-        $(btn).click(function(e){
-            e.stopPropagation();
-            $(box).slideToggle();
+            ];
+            pairs.forEach(([btn, box]) => {
+                const el = document.querySelector(btn);
+                if (el) {
+                    el.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        $(box).slideToggle();
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching or setting SVG:', error);
         });
-    });
 });
 
 // Wyszukiwarka drużyn section search w jquery

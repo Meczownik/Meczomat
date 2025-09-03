@@ -105,34 +105,6 @@
         </-block;">
             </div>
 
-                            <script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('dist/images/POL_location_map.svg')
-        .then(res => res.text())
-        .then(svg => {
-            document.getElementById('map-container').innerHTML = svg;
-
-            // Po załadowaniu SVG podpinamy eventy
-            const pairs = [
-                ["#dolnoslaskie", "#info-dolnoslaskie"],
-                // ...dodaj inne pary jeśli chcesz
-            ];
-            pairs.forEach(([btn, box]) => {
-                const el = document.querySelector(btn);
-                if (el) {
-                    el.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        $(box).slideToggle();
-                    });
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching or setting SVG:', error);
-        });
-});
-            </script>
-
             <div id="map-container">
 
             </div>
