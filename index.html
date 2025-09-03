@@ -10,13 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
     <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> --> 
-                <script>
-            fetch('./dist/images/POL_Location_map.svg')
-                .then(res => res.text())
-                .then(svg => {
-                document.getElementById('map-container').innerHTML = svg;
-                });
-            </script>
 </head>
 <body>
     <div class="header">
@@ -25,7 +18,7 @@
                 <a href="index.html" target="_self" rel="noopener noreferrer" class="logo-link">
                     <h3>Meczomat.pl</h3>
                     <h1>|</h1>
-                    <img src="/dist/images/Group 2.jpg" alt="logo">
+                    <img src="/dist/images/Group_2.jpg" alt="logo">
                 </a>
             </div>
             <div class="hamburger-menu" id="hamburgerMenu">
@@ -111,6 +104,16 @@
         </section>
         </-block;">
             </div>
+
+                            <script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('./dist/images/POL_Location_map.svg')
+        .then(res => res.text())
+        .then(svg => {
+            document.getElementById('map-container').innerHTML = svg;
+        });
+});
+            </script>
 
 
             <!-- Tabelki / boxy -->
