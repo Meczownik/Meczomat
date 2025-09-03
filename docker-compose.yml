@@ -4,16 +4,16 @@ services:
     container_name: match-live-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: meczownik
-      MYSQL_USER: nestjs
-      MYSQL_PASSWORD: nestjspassword
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - '3306:3306'
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       retries: 5
 
@@ -25,16 +25,16 @@ services:
       db:
         condition: service_healthy
     environment:
-      DB_HOST: db
+      DB_HOST: match-live-db
       DB_PORT: 3306
-      DB_USERNAME: nestjs
+      DB_USER: nestjs
       DB_PASSWORD: nestjspassword
-      DB_NAME: meczownik
+      DB_NAME: meczomat
     volumes:
       - .:/app
       - /app/node_modules
     working_dir: /app
-    command: npm run start:dev
+    command: npm run start:prod
     ports:
       - '3000:3000'
 

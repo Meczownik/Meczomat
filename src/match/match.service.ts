@@ -46,4 +46,11 @@ export class MatchService {
     order: { matchDate: 'ASC'},
     });
   }
+
+  async updateMatchResult(id: number, updateData: Partial<Match>): Promise<Match> {
+    const match = await this.findOne(id);
+
+    Object.assign(match, updateData);
+    return this.matchRepository.save(match);
+  }
 }

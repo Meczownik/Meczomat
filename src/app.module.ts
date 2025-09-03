@@ -13,11 +13,6 @@ import { Match } from './match/entities/match.entity';
 import { Season } from './season/entities/season.entity';
 import { Group } from './group/entities/group.entity';
 import { ScheduleModule } from '@nestjs/schedule';
-//Ładuje zmienne środowiskowe (ConfigModule). 
-// ✔ Łączy się z MySQL (TypeOrmModule.forRoot()). 
-// ✔ Rejestruje encję Team w module (forFeature()). 
-// ✔ Dodaje kontroler TeamController do obsługi żądań HTTP. 
-// ✔ Dodaje serwis TeamService, który zarządza danymi drużyn.
 
 @Module({
   imports: [
@@ -34,7 +29,8 @@ import { ScheduleModule } from '@nestjs/schedule';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         entities: [Team, Group, Season, Match, Standing],
-        synchronize: false,
+        synchronize: true,
+        logging: true,  
       }),
     }),
     TypeOrmModule.forFeature([Team, Group, Season, Match, Standing]),

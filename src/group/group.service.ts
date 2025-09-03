@@ -15,11 +15,12 @@ export class GroupService {
 
   async getGroupDetails(id: number) {
   const group = await this.groupRepository.findOne({
-    where: { id },
-    select: ['id', 'name', 'league', 'district'],
+    where: { id },       
+    relations: [],       
+    select: ['id', 'name', 'league', 'district'], 
   });
 
-  console.log(group);
+  console.log(group); 
 
   if (!group) {
     throw new NotFoundException(`Nie znaleziono grupy o ID ${id}`);

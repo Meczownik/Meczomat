@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { MatchService } from './match.service';
+import { UpdateMatchDto } from './dto/update-match.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Match } from './entities/match.entity';
 
@@ -30,6 +31,15 @@ export class MatchController {
   @ApiOperation({ summary: 'Pobierz wszystkie mecze' })
   async findAll(): Promise<Match[]>{
     return this.matchService.findAll();
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Aktualizuj wynik meczu' })
+  async update(
+  @Param('id', ParseIntPipe) id: number,
+  @Body() updateMatchDto: UpdateMatchDto
+  ): Promise<Match> {
+    return this.matchService.updateMatchResult(id, updateMatchDto);
   }
 
 }
