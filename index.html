@@ -107,7 +107,7 @@
 
                             <script>
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('dist/images/POL_Location_map.svg')
+    fetch('dist/images/POL_location_map.svg')
         .then(res => res.text())
         .then(svg => {
             document.getElementById('map-container').innerHTML = svg;
@@ -118,6 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
             </script>
 
+            <div id="map-container">
+
+            </div>
 
             <!-- Tabelki / boxy -->
 
