@@ -218,3 +218,33 @@
         padding: 8px 12px;
     }
 }
+/* Responsywność dla formularza admin-match-form */
+@media (max-width: 768px) {
+    .admin-match-form {
+        max-width: 98vw;
+        padding: 14px 6px;
+        margin: 20px auto;
+        border-radius: 8px;
+    }
+    .admin-match-form h2 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    .admin-match-form label {
+        font-size: 0.95rem;
+        margin-top: 8px;
+        margin-bottom: 2px;
+    }
+    .admin-match-form input {
+        font-size: 0.95rem;
+        padding: 6px;
+        margin-bottom: 6px;
+        border-radius: 4px;
+    }
+    .admin-match-form button {
+        font-size: 1rem;
+        padding: 8px;
+        border-radius: 5px;
+        margin-top: 8px;
+    }
+}

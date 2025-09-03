@@ -1158,3 +1158,46 @@ main h2::after {
     padding: 20px 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+.admin-match-form {
+    max-width: 400px;
+    margin: 40px auto;
+    background: #f9f9f9;
+    padding: 24px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.admin-match-form h2 {
+    text-align: center;
+    margin-bottom: 18px;
+}
+.admin-match-form label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+.admin-match-form input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+.admin-match-form button {
+    width: 100%;
+    padding: 10px;
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+.admin-match-form button:hover {
+    background: #0056b3;
+}
+
