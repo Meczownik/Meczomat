@@ -247,7 +247,7 @@ section {
     margin: 40px 0;
 }
 
-.map-container {
+#map-container {
     max-width: 800px;
     margin: 0 auto;
     display: flex;
@@ -1210,7 +1210,4 @@ main h2::after {
 #svg2 {
      width: 50%;
     height: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     }
