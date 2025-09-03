@@ -254,7 +254,7 @@ section {
 
 /* Dla SVG wewnątrz kontenera */
 .map-container svg {
-    width: 800px;
+    width: 50%;
     height: auto;
     display: block;
 }
@@ -1201,3 +1201,7 @@ main h2::after {
     background: #0056b3;
 }
 
+#svg2 {
+      width: 50%;
+      height: 50%;
+    }
