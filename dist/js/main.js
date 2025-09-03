@@ -128,7 +128,7 @@ $('.group-btn').on('click', function() {
 $(document).ready(function () {
   $('#lowerLeaguesBtn').on('click', function (e) {
     e.preventDefault();
-    const $target = $('.map-section');
+    const $target = $('#map-container');
     if ($target.length) {
       $('html, body').animate({
         scrollTop: $target.offset().top - 300// opcjonalnie odejmij padding/header
