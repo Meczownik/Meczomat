@@ -107,7 +107,7 @@
 
                             <script>
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/Meczomat/dist/images/POL_Location_map.svg')
+    fetch('dist/images/POL_Location_map.svg')
         .then(res => res.text())
         .then(svg => {
             document.getElementById('map-container').innerHTML = svg;
