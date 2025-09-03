@@ -248,13 +248,13 @@ section {
 }
 
 .map-container {
-    max-width: 500px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
 /* Dla SVG wewnątrz kontenera */
 .map-container svg {
-    width: 100%;
+    width: 800px;
     height: auto;
     display: block;
 }
