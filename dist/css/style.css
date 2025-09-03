@@ -260,6 +260,9 @@ section {
     width: 50%;
     height: auto;
     display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .map-dot {
@@ -1205,6 +1208,9 @@ main h2::after {
 }
 
 #svg2 {
-      width: 50%;
-      height: 50%;
+     width: 50%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     }
