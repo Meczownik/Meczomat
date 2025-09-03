@@ -9,7 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> --> 
+                <script>
+            fetch('./dist/images/POL_Location_map.svg')
+                .then(res => res.text())
+                .then(svg => {
+                document.getElementById('map-container').innerHTML = svg;
+                });
+            </script>
 </head>
 <body>
     <div class="header">
@@ -103,13 +110,7 @@
             <div class="map-container" id="map-container" style="position: relative; display: inline-block;">
             </div>
 
-            <script>
-            fetch('./dist/images/POL_Location_map.svg')
-                .then(res => res.text())
-                .then(svg => {
-                document.getElementById('map-container').innerHTML = svg;
-                });
-            </script>
+
             <!-- Tabelki / boxy -->
 
             <!-- Zachodnio-Pomorskie -->
