@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meczomat</title>
-    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="/Meczomat/dist/css/style.css">
     <link rel="stylesheet" href="dist/css/respo.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,18 +96,20 @@
         </section>
 
         <!--Sekcja ładowania druzyn z search-->
+        <div style="color: white;">
         <section class="search">
-            <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
+            <input type="text" id="teamSearchInput" placeholder=
+            <button id="teamSearchBtn">Szukaj</button>"WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
             <button id="teamSearchBtn">Szukaj</button>
             <ul id="autocompleteList" class="autocomplete-list"></ul>
             <div id="teamSearchError" class="error-message"></div>
         </section>
 
-
-        <h1>Znajdź klasyfikację ogólną twojego regionu!</h1>
-
-        <section class="map-section">   
-            <div class="map-container" id="map-container" style="position: relative; display: inline-block;">
+        <section id="searchResults" class="search-results" style="display: none; margin-top: 20px;">
+            <h3>Wyniki wyszukiwania:</h3>
+            <ul id="teamResultsList"></ul>
+        </section>
+        </-block;">
             </div>
 
 
