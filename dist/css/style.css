@@ -1211,3 +1211,8 @@ main h2::after {
      width: 50%;
     height: 50%;
     }
+
+div#map-container {
+    display: flex;
+    justify-content: center;
+}
