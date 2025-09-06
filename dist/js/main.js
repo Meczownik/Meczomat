@@ -3,11 +3,13 @@ $(document).ready(function(){
 });
 
 
+//------------------------------------------------------------------------------
 
-// Wyszukiwarka drużyn section search w jquery
-const API_BASE = 'http://localhost:3000';
+
+const API_BASE = 'http://127.0.0.1:3000';
 
 $(document).ready(function () {
+
   const input = $('#teamSearchInput');
   const errorDiv = $('#teamSearchError');
   const autocompleteList = $('#autocompleteList');
@@ -25,29 +27,26 @@ $(document).ready(function () {
 
     try {
       const res = await fetch(`${API_BASE}/teams/search?name=${encodeURIComponent(name)}`);
+      if (!res.ok) throw new Error('Błąd podczas wyszukiwania');
+
       const data = await res.json();
+      if (data.length === 0) return;
 
-      if (!res.ok) {
-        errorDiv.text(data.message || 'Błąd podczas wyszukiwania.');
-        return;
-      }
+      data.forEach(team => {
+        const item = $(`
+          <li class="autocomplete-item" style="cursor:pointer;">
+            <strong>${team.name}</strong>
+          </li>
+        `);
 
-      if (data.length > 0) {
-        data.forEach(team => {
-          const item = $(`
-            <li class="autocomplete-item">
-              <strong>${team.name}</strong>}
-            </li>
-          `);
-
-          item.on('click', () => {
-            window.location.href = `/team_results.html?id=${team.id}`;
-          });
-
-          autocompleteList.append(item);
+        item.on('click', () => {
+          window.location.href = `/team_results.html?id=${team.id}`;
         });
-        autocompleteList.show();
-      }
+
+        autocompleteList.append(item);
+      });
+
+      autocompleteList.show();
     } catch (err) {
       console.error(err);
       errorDiv.text('Błąd połączenia z serwerem.');
@@ -55,7 +54,7 @@ $(document).ready(function () {
   });
 
   input.on('keydown', function (e) {
-    if ((e.which === 13 || e.key === 'Enter') && autocompleteList.children().length > 0) {
+    if (e.key === 'Enter' && autocompleteList.children().length > 0) {
       e.preventDefault();
       autocompleteList.children().first().click();
     }
@@ -66,35 +65,43 @@ $(document).ready(function () {
       hideAutocomplete();
     }
   });
-});
 
+  input.on('focus', hideAutocomplete); 
 
-//obsługa przycisków do results.html
-
-$(document).ready(function() {
-  $('.group-btn').on('click', async function() {
+  $('.group-btn').on('click', async function () {
     const groupId = $(this).data('group-id');
     const container = $('#groupTeamsContainer');
     container.empty();
 
     try {
-      const res = await fetch(`http://localhost:3000/group/${groupId}`);
+      const res = await fetch(`${API_BASE}/group/${groupId}`);
       if (!res.ok) throw new Error('Błąd pobierania grupy');
 
       const group = await res.json();
 
       container.append(`<h2>${group.league} - ${group.district} - ${group.name}</h2>`);
+
       const ul = $('<ul></ul>');
-      group.teams.forEach(team => {
-        ul.append(`<li>${team.name}</li>`);
+      group.teams.forEach(({ name, id }) => {
+        const li = $(`<li class="team-link" style="cursor:pointer;" data-id="${id}">${name}</li>`);
+        li.on('click', () => {
+          window.location.href = `/team_results.html?id=${id}`;
+        });
+        ul.append(li);
       });
+
       container.append(ul);
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       container.text('Nie udało się pobrać drużyn dla tej grupy.');
     }
   });
 });
+
+//------------------------------------------------------------------------------
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const dropdownBtn = document.querySelector('.dropdown-btn');
     const dropdownMenu = document.querySelector('.dropdown-menu');
