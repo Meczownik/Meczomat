@@ -8,44 +8,44 @@ $(function () {
     return;
   }
 
-  $.getJSON(`http://localhost:3000/group/details/${groupId}`)
-    .done(group => {
-      $('#leagueName').text(group.league);
-      $('#regionName').text(group.district);
-      $('#groupName').text(group.groupName);
-    })
-    .fail(() => {
-      console.warn('Nie udało się pobrać szczegółów grupy');
-    });
+  const API_BASE = 'http://127.0.0.1:3000'; 
 
+ 
+  const groupRequest = $.getJSON(`${API_BASE}/group/details/${groupId}`);
+  const standingsRequest = $.getJSON(`${API_BASE}/standings/${groupId}`);
 
+  $.when(groupRequest, standingsRequest)
+    .done((groupResp, standingsResp) => {
+      const group = groupResp[0];
+      const standings = standingsResp[0];
 
-    
-  $.getJSON(`http://localhost:3000/standings/${groupId}`)
-    .done(data => {
-      if (!data.length) {
-        $tbody.html("<tr><td colspan='7'>Brak wyników dla tej grupy.</td></tr>");
-        return;
+      
+      $('#leagueName').text(group.league || '-');
+      $('#regionName').text(group.district || '-');
+      $('#groupName').text(group.groupName || '-');
+
+      if (standings && standings.length) {
+        const rows = standings.map((s, index) => `
+          <tr class="team-row" data-id="${s.team.id}">
+            <td>${index + 1}</td>
+            <td>${s.team.name}</td>
+            <td>${s.points}</td>
+            <td>${s.goalsFor}</td>
+            <td>${s.goalsAgainst}</td>
+            <td>${s.goalDifference}</td>
+          </tr>
+        `).join('');
+        $tbody.html(rows);
+      } else {
+        $tbody.html("<tr><td colspan='6'>Brak wyników dla tej grupy.</td></tr>");
       }
-      renderTable(data);
     })
-    .fail(() => {
-      $tbody.html("<tr><td colspan='7'>Błąd podczas pobierania danych z serwera.</td></tr>");
+    .fail((groupErr, standingsErr) => {
+      console.error("Błąd pobierania danych grupy lub tabeli:", groupErr, standingsErr);
+      $tbody.html("<tr><td colspan='6'>Błąd pobierania danych z serwera.</td></tr>");
     });
 
-  function renderTable(data) {
-    const rows = data.map(s => `
-      <tr class="team-row" data-id="${s.team.id}">
-        <td>${s.team.name}</td>
-        <td>${s.points}</td>
-        <td>${s.goalsFor}</td>
-        <td>${s.goalsAgainst}</td>
-        <td>${s.goalDifference}</td>
-      </tr>
-    `).join('');
-    $tbody.html(rows);
-  }
-
+  // Kliknięcie na wiersz drużyny -> przejście do team_results
   $tbody.on('click', '.team-row', function () {
     const teamId = $(this).data('id');
     if (teamId) {
