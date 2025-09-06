@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meczomat</title>
-    <link rel="stylesheet" href="./dist/css/style.css">
-    <link rel="stylesheet" href="./dist/css/respo.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meczomat Admin</title>
+<link rel="stylesheet" href="./dist/css/style.css">
+<link rel="stylesheet" href="./dist/css/respo.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
 </head>
 <body>
-    <main>
-        <h1>Welcome to Meczomat Admin</h1>
-        <section class="admin-match-form">
-            <h2>Dodaj wynik meczu</h2>
-            <form id="matchResultForm">
-                <label for="team1">Drużyna 1:</label>
-                <input type="text" id="team1" name="team1" required placeholder="Nazwa pierwszej drużyny">
+<main>
+  <h1>Welcome to Meczomat Admin</h1>
+  <!-- Formularz dodawania wyniku -->
+  <section class="admin-match-form">
+  <h2>Dodaj wynik meczu</h2>
+  <form id="matchResultForm">
+    <div class="autocomplete-wrapper">
+      <label for="team1">Drużyna 1:</label>
+      <input type="text" id="team1" name="team1" required placeholder="Nazwa pierwszej drużyny">
+      <ul class="admin-autocomplete-list"></ul>
+    </div>
 
-                <label for="team2">Drużyna 2:</label>
-                <input type="text" id="team2" name="team2" required placeholder="Nazwa drugiej drużyny">
+    <div class="autocomplete-wrapper">
+      <label for="team2">Drużyna 2:</label>
+      <input type="text" id="team2" name="team2" required placeholder="Nazwa drugiej drużyny">
+      <ul class="admin-autocomplete-list"></ul>
+    </div>
 
-                <label for="score1">Wynik drużyny 1:</label>
-                <input type="number" id="score1" name="score1" min="0" required placeholder="Gole drużyny 1">
+    <label for="score1">Wynik drużyny 1:</label>
+    <input type="number" id="score1" name="score1" min="0" required placeholder="Gole drużyny 1">
 
-                <label for="score2">Wynik drużyny 2:</label>
-                <input type="number" id="score2" name="score2" min="0" required placeholder="Gole drużyny 2">
+    <label for="score2">Wynik drużyny 2:</label>
+    <input type="number" id="score2" name="score2" min="0" required placeholder="Gole drużyny 2">
 
-                <button type="submit">Zapisz wynik</button>
-            </form>
-        </section>
-    </main>
+    <button type="submit">Zapisz wynik</button>
+  </form>
+</section>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="./dist/js/admin.js"></script>
 </body>
 </html>

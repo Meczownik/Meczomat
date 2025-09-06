@@ -653,6 +653,46 @@ section {
 }
 
 
+/* Seatch do panelu admina dodany prefiks admin żeby nazwy nie kolidowały*/
+.autocomplete-wrapper {
+  position: relative; 
+}
+
+.autocomplete-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.admin-autocomplete-list {
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  transform: translateX(9px); 
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: none;
+}
+
+.admin-autocomplete-list li {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.admin-autocomplete-list li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Seatch do panelu admina dodany prefiks admin żeby nazwy nie kolidowały - koniec sekcji w css*/
+
+
+
 ::-webkit-scrollbar {
   width: 8px; /* ważne! definiuje widoczność */
 }
