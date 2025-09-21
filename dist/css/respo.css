@@ -4,6 +4,10 @@
         display: none;
     }
 
+    .dropdown-menu {
+    position: sticky
+    }
+
     .hamburger-menu {
         display: flex;
     }
