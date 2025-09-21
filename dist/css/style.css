@@ -1086,7 +1086,7 @@ main h2::after {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Delikatny cień */
-    max-width: 600px;
+    /* max-width: 600px; */
     margin: 40px auto; /* Wyśrodkowanie */
     text-align: center;
 }
