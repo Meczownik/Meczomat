@@ -1,5 +1,5 @@
 /* Responsywność */
-@media (max-width: 768px) {
+@media (max-width: 1222px) {
     .nav__center, .nav__right {
         display: none;
     }
@@ -81,6 +81,10 @@
         flex: 1 1 100%; /* Zajmuje całą szerokość */
         max-width: 100%;
     }
+    
+    #map-container svg {
+    width: 100%;
+    }
 
     .info-box {
         flex: 1 1 45%; /* Zajmuje 45% szerokości */
@@ -103,6 +107,11 @@
         flex: 1 1 100%; /* Zajmuje całą szerokość */
         max-width: 100%;
     }
+
+    #map-container svg {
+    width: 100%;
+    }
+
 
     .info-box {
         flex: 1 1 100%; /* Zajmuje całą szerokość */

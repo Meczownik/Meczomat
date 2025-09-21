@@ -154,4 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
         navCenter.classList.toggle('active');
         navRight.classList.toggle('active');
     });
+    
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1222) {
+            hamburgerMenu.classList.remove('active');
+            navCenter.classList.remove('active');
+            navRight.classList.remove('active');
+        }
+    });
 });

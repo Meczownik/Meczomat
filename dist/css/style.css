@@ -1164,6 +1164,7 @@ main h2::after {
 }
 
 .hamburger-menu {
+    margin: 10px;
     display: none;
     flex-direction: column;
     justify-content: space-between;
@@ -1194,10 +1195,40 @@ main h2::after {
 }
 
 /* Pokaż menu po kliknięciu */
-.nav__center.active, .nav__right.active {
+.nav__center.active {
+  display: flex;
+  flex-direction: column;  /* kolumna */
+  align-items: center;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Ustaw listę pionowo */
+.nav__center.active .nav__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  width: 100%;
+}
+
+/* Każdy element listy pełna szerokość + wyśrodkowany tekst */
+.nav__center.active .nav__list li {
+  width: 100%;
+  text-align: center;
+}
+
+.nav__center.active .nav__list a {
+  display: block;
+  color: white;
+  text-decoration: none;
+}
+
+.nav__right.active {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     width: 100%;
     background-color: #003726;
     z-index: 1000;
