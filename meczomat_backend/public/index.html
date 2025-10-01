@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meczomat</title>
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/respo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> --> 
+     <meta http-equiv="Permissions-Policy" content="compute-pressure=(self)">
+</head>
+<body>
+    <div class="header">
+        <nav>
+            <div class="nav__left">
+                <a href="index.html" target="_self" rel="noopener noreferrer" class="logo-link">
+                    <h3>Meczomat.pl</h3>
+                    <h1>|</h1>
+                    <img src="dist/images/Group_2.jpg" alt="logo">
+                </a>
+            </div>
+            <div class="hamburger-menu" id="hamburgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav__center">
+                <ul class="nav__list">
+                    <li><a href="dist/subpages/transmisje.html">TRANSMISJE</a></li>
+                    <li><a href="#news">SKRÓTY</a></li>
+                    <li><a href="">EKSTRAKLASA</a></li>
+                    <li><a href="">1-LIGA</a></li>
+                    <li class="dropdown">
+                        <button class="dropdown-btn">&#x25BC;</button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">2 liga</a></li>
+                            <li><a href="#">3 liga gr1</a></li>
+                            <li><a href="#">3 liga gr2</a></li>
+                            <li><a href="#">3 liga gr3</a></li>
+                            <li><a href="#">3 liga gr4</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" id="lowerLeaguesBtn">NIŻSZE LIGI</a></li>
+                </ul>
+            </div>
+            <div class="nav__right">
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                    <img src="dist/images/facebook-5222.svg" class="default-icon">
+                    <img src="dist/images/facebook.webp" class="hover-icon">
+                </a>
+
+                <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                    <img src="dist/images/youtube-logo-2431.svg" class="default-icon">
+                    <img src="dist/images/youtube.webp" class="hover-icon">
+                </a>
+    
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                    <img src="dist/images/instagram-logo-8869.svg" class="default-icon">
+                    <img src="dist/images/instagram.webp" class="hover-icon">
+                </a>
+            </div>
+        </nav>
+    </div>
+    <main>
+        <section class="hero">
+
+            <h1>Obejrzyj transmisję z najciekawszego meczu kolejki! </h1>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section class="match-info">
+            <div class="teams">
+                <div class="team home">DRUŻYNA GOSPODARZY</div>
+                <div class="vs">VS</div>
+                <div class="team away">DRUŻYNA GOŚCI</div>
+            </div>
+            <div class="match-date">
+                <span class="time">GODZ 17.30 5. KWIETNIA</span>
+            </div>
+        </section>
+
+        <section class="sponsor">
+            <div class="sponsor-placeholder">MIEJSCE DLA POTENCJALNEGO SPONSORA</div>
+        </section>
+
+        <!--Sekcja ładowania druzyn z search-->
+        <div style="color: white;">
+        <section class="search">
+            <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ">
+            <button id="teamSearchBtn">Szukaj</button>
+            <ul id="autocompleteList" class="autocomplete-list"></ul>
+            <div id="teamSearchError" class="error-message"></div>
+        </section>
+
+        <section id="searchResults" class="search-results" style="display: none; margin-top: 20px;">
+            <h3>Wyniki wyszukiwania:</h3>
+            <ul id="teamResultsList"></ul>
+        </section>
+        </-block;">
+            </div>
+<script>
+            document.addEventListener('DOMContentLoaded', function() {
+    fetch('dist/images/POL_location_map.svg')
+        .then(res => res.text())
+        .then(svg => {
+            document.getElementById('map-container').innerHTML = svg;
+
+            // Po załadowaniu SVG podpinamy eventy
+            // Tablica z parami: [przycisk, box do pokazania]
+    const pairs = [
+
+        //Zachodnio-Pomorskie
+
+        ["#zachodnio-pomorskie", "#info-zachodnio-pomorskie"],
+
+        //Pomorskie
+
+        ["#pomorskie", "#info-pomorskie"],
+        ["#a_gdansk", "#A-klasa_Gdansk"],
+        ["a_malbork", "#A-klasa_Malbork"],
+        ["#b_gdansk", "#B-klasa_Gdansk"],
+        ["#b_malbork", "#B-klasa_Malbork"],
+
+        //Warmińsko-Mazurskie
+
+        ["#warminsko-mazurskie", "#info-warminsko-mazurskie"],
+
+        //Podlaskie
+
+        ["#podlaskie", "#info-podlaskie"],
+
+        //Lubuskie
+
+        ["#lubuskie", "#info-lubuskie"],
+        ["#a_gorzow-wielkopolski", "#A-klasa_gorzow-wielkopolski"],
+        ["#a_zielona-gora", "#A-klasa_zielona-gora"],
+
+        //Wielkopolskie
+
+        ["#wielkopolskie", "#info-wielkopolskie"],
+
+        //Kujawsko-Pomorskie
+
+        ["#kujawsko-pomorskie", "#info-kujawsko-pomorskie"],
+        ["#a_bydgoszcz", "#A-klasa_bydgoszcz"],
+        ["#b_bydgoszcz", "#B-klasa_bydgoszcz"],
+        ["#b_torun", "#B-klasa_torun"],
+
+        //Mazowieckie
+
+        ["#mazowieckie", "#info-mazowieckie"],
+        ["#o_warszawa", "#Okregowka_Warszawa"],
+        ["#a_warszawa", "#A-klasa_Warszawa"],
+        ["#a_radom", "#A-klasa_Radom"],
+        ["#b_warszawa", "#B-klasa_Warszawa"],
+        ["#b_radom", "#B-klasa_Radom"],
+        ["#b_siedlce", "#B-klasa_Siedlce"],
+
+        //Dolnośląskie
+
+        ["#dolnoslaskie", "#info-dolnoslaskie"],
+        ["#a_wroclaw", "#A-klasa_Wroclaw"],
+        ["#a_walbrzych", "#A-klasa_Walbrzych"],
+        ["#a_legnica", "#A-klasa_Legnica"],
+        ["#a_jelenia_gora", "#A-klasa_Jelenia_Gora"],
+        ["#b_walbrzych", "#B-klasa_Walbrzych"],
+        ["#b_legnica", "#B-klasa_Legnica"],
+        ["#b_jelenia_gora", "#B-klasa_Jelenia_Gora"],
+
+        //Łódzkie
+
+        ["#lodzkie", "#info-lodzkie"],
+
+        //Lubelskie
+
+        ["#lubelskie", "#info-lubelskie"],
+        ["#a_biala-podlaska", "#A-klasa_Biala-Podlaska"],
+
+        //Opolskie
+
+        ["#opolskie", "#info-opolskie"],
+
+        //Śląskie
+
+        ["#slaskie", "#info-slaskie"],
+        ["#a_rybnik", "#A-klasa_Rybnik"],
+        ["#b_rybnik", "#B-klasa_Rybnik"],
+
+        //Świętokrzyskie
+
+        ["#swietokrzyskie", "#info-swietokrzyskie"],
+
+        //Małopolskie
+
+        ["#malopolskie", "#info-malopolskie"],
+        ["#o_krakow", "#Okregowka_Krakow"],
+        ["#a_wadowice", "#A-klasa_Wadowice"],
+        ["#b_wadowice", "#B-klasa_Wadowice"],
+        ["#b_podhalanski", "#B-klasa_Podhalanski"],
+        
+        //Podkarpackie
+
+        ["#podkarpackie", "#info-podkarpackie"],
+        ["#a_jaroslaw", "#A-klasa_Jaroslaw"],
+        ["#a_krosno", "#A-klasa_Krosno"],
+        ["#a_rzeszow", "#A-klasa_Rzeszow"],
+        ["#a_stalowa-wola", "#A-klasa_Stalowa-Wola"],
+        ["#b_debica", "#B-klasa_Debica"],
+        ["#b_krosno", "#B-klasa_Krosno"],
+        ["#b_rzeszow", "#B-klasa_Rzeszow"],
+        ["#b_stalowa-wola", "#B-klasa_Stalowa-Wola"]
+            ];
+            pairs.forEach(([btn, box]) => {
+                const el = document.querySelector(btn);
+                if (el) {
+                    el.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        $(box).slideToggle();
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching or setting SVG:', error);
+        });
+});
+</script>
+
+            <div id="map-container">
+
+            </div>
+
+            <h1>Znajdź swoją ligę</h1>
+
+            <!-- Tabelki / boxy -->
+            <!-- Zachodnio-Pomorskie -->
+            <div id="info-zachodnio-pomorskie" class="info-box">
+                <h1>Zachodnio-Pomorskie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+                <h2>A-klasa</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+                    <button>Gr. 5</button>
+                    <button>Gr. 6</button>
+                    <button>Gr. 7</button>
+                    <button>Gr. 8</button>
+                <h2>B-Klasa</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+                    <button>Gr. 5</button>
+                    <button>Gr. 6</button>
+                    <button>Gr. 7</button>
+                    <button>Gr. 8</button>
+            </div> 
+
+            <!-- Pomorskie -->
+
+            <div id="info-pomorskie" class="info-box">
+                <h1>Pomorskie</h1>
+                    <button>IV liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Grupa 1</button>
+                    <button>Grupa 2</button>
+                <h2>A-klasa</h2>
+                    <button id="a_gdansk">Gdańsk</button>
+                    <button id="a_malbork">Malbork</button>
+                        <div class="info-box" id="A-klasa_Gdansk">
+                            <h2>A-klasa Gdańsk</h2>
+                            <button>Gr. 1 </button>
+                            <button>Gr. 2 </button>
+                            <button>Gr. 3 </button>
+                        </div>
+                        <div class="info-box" id="A-klasa_Malbork">
+                            <h2>A-klasa Malbork</h2>
+                            <button>Gr. 4</button>
+                        </div>
+                <h2>B-klasa</h2>
+                    <button id="b_gdansk">Gdańsk</button>
+                    <button id="b_malbork">Malbork</button>
+                        <div class="info-box" id="B-klasa_Gdansk">
+                            <h2>B-klasa Gdańsk</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                            <button>Gr. 3</button>
+                            <button>Gr. 4</button>
+                            <button>Gr. 5</button>
+                            <button>Gr. 6</button>
+                        </div>
+                        <div class="info-box" id="B-klasa_Malbork">
+                            <h2>B-klasa Malbork</h2>
+                            <button>Gr. 7</button>
+                            <button>Gr. 8</button>
+                        </div>
+            </div>
+
+            <!-- Warmińsko-mazurskie -->
+
+            <div id="info-warminsko-mazurskie" class="info-box">
+                <h1>Warmińsko-Mazurskie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                <h2>A-klasa</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+                <h2>B-Klasa</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+            </div>
+
+            <!-- Podlaskie -->
+
+            <div id="info-podlaskie" class="info-box">
+                <h1>Podlaskie</h1>
+                <button>IV Liga</button>
+                <button>Okręgówka</button>
+                <h2>A-klasa</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+            </div>
+            
+            <!-- Lubuskie -->
+
+            <div id="info-lubuskie" class="info-box">
+                <h1>Lubuskie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Gorzów Wielkopolski</button>
+                    <button>Zielona Góra</button>
+                <h2>A-klasa</h2>
+                    <button id="a_gorzow-wielkopolski">Gorzów Wielkopolski</button>
+                    <button id="a_zielona-gora">Zielona Góra</button>
+                        <div class="info-box" id="A-klasa_gorzow-wielkopolski">
+                            <h2>A-klasa Gorzów Wielkopolski</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+                        <div class="info-box" id="A-klasa_zielona-gora">
+                            <h2>A-klasa Zielona Góra</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                            <button>Gr. 3</button>
+                        </div>
+                <h2>B-klasa</h2>
+                    <button>Krosno Odrzańskie</button>
+                    <button>Nowa Sól</button>
+                    <button>Świebodzin</button>
+                    <button>Zielona Góra</button>
+                    <button>Żagań</button>
+                    <button>Żary</button>
+            </div>
+
+            <!-- Wielkopolskie -->
+
+            <div id="info-wielkopolskie" class="info-box">
+                <h1>Wielkopolskie</h1>
+            </div>
+
+            <!-- Kujawsko-Pomorskie -->
+
+            <div id="info-kujawsko-pomorskie" class="info-box">
+                <h1>Kujawsko-Pomorskie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                <h2>A-klasa</h2>
+                    <button id="a_bydgoszcz">Bydgoszcz</button>
+                    <button>Toruń</button>
+                    <button>Włocławek</button>
+                        <div class="info-box" id="A-klasa_bydgoszcz">
+                            <h2>A-klasa Bydgoszcz</h2>
+                            <button>Gr. 1 "Północ"</button>
+                            <button>Gr. 2 "Południe"</button>
+                        </div>
+                <h2>B-klasa</h2>
+                    <button id="b_bydgoszcz">Bydgoszcz</button>
+                    <button id="b_torun">Toruń</button>
+                    <button>Włocławek</button>
+                        <div class="info-box" id="B-klasa_bydgoszcz">
+                            <h2>B-klasa Bydgoszcz</h2>
+                            <button>Gr. 1 "Sępólno-Tuchola"</button>
+                            <button>Gr. 2 "Świecie-Bydgoszcz"</button>
+                            <button>Gr. 3 "Nakło-Bydgoszcz"</button>
+                            <button>Gr. 4 "Żnin-Mogilno"</button>
+                            <button>Gr. 5 "Inowrocław"</button>
+                        </div>
+                        <div class="info-box" id="B-klasa_torun">
+                            <h2>B-klasa Toruń</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+            </div>
+
+            <!-- Mazowieckie -->
+
+            <div id="info-mazowieckie" class="info-box">
+                <h1>Mazowieckie</h1>
+                    <button>IV liga</button>
+                <h2>V liga</h2>
+                    <button>V liga GR. 1</button>
+                    <button>V liga GR. 2</button>
+                <h2>Okręgówka</h2>
+                    <button>Ciechanów-Ostrołęka</button>
+                    <button>Płock</button>
+                    <button>Radom</button>
+                    <button>Siedlce</button>
+                    <button id="o_warszawa">Warszawa</button>
+                        <div class="info-box" id="Okregowka_Warszawa">
+                            <h2>Okręgówka Warszawa</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+                <h2>A-klasa</h2>
+                    <button>Ciechanów-Ostrołęka</button>
+                    <button>Płock</button>
+                    <button id="a_radom">Radom</button>
+                    <button>Siedlce</button>
+                    <button id="a_warszawa">Warszawa</button>
+                        <div class="info-box" id="A-klasa_Radom">
+                            <h2>A-klasa Radom</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+                        <div class="info-box" id="A-klasa_Warszawa">
+                            <h2>A-klasa Warszawa</h2>
+                            <button>Gr. 1 </button>
+                            <button>Gr. 2 </button>
+                            <button>Gr. 3 </button>
+                            <button>Gr. 4</button>
+                        </div>
+                <h2>B-klasa</h2>
+                    <button>Ciechanów-Ostrołęka</button>
+                    <button>Płock</button>
+                    <button id="b_radom">Radom</button>
+                    <button id="b_siedlce">Siedlce</button>
+                    <button id="b_warszawa">Warszawa</button>
+                        <div class="info-box" id="B-klasa_Radom">
+                            <h2>B-klasa Radom</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+                        <div class="info-box" id="B-klasa_Siedlce">
+                            <h2>B-klasa Siedlce</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+                        <div class="info-box" id="B-klasa_Warszawa">
+                            <h2>B-klasa Warszawa</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                            <button>Gr. 3</button>
+                            <button>Gr. 4</button>
+                            <button>Gr. 5</button>
+                            <button>Gr. 6</button>
+                            <button>Gr. 7</button>
+                        </div>
+            </div>
+
+            <!-- Dolnośląskie -->
+
+            <div id="info-dolnoslaskie" class="info-box">
+            <h1>Dolnośląskie</h1>
+
+            <!-- IV liga -->
+            <a href="result.html?liga=iv-liga&okreg=dolnoslaskie">
+                <button>IV liga (Dolnyśląsk)</button>
+            </a>
+
+            <!-- OKRĘGÓWKA -->
+            <h2>Okręgówka</h2>
+                <a href="results.html?groupId=43"><button>Wrocław</button></a>
+                <a href="results.html?groupId=29"><button>Wałbrzych</button></a>
+                <a href="results.html?groupId=20"><button>Legnica</button></a>
+                <a href="results.html?groupId=11"><button>Jelenia Góra</button></a>
+
+            <!-- A-KLASA -->
+            <h2>A-klasa</h2>
+            <button id="a_wroclaw">Wrocław</button>
+            <div id="A-klasa_Wroclaw" class="info-box">
+                <h3>A-klasa Wrocław</h3>
+                    <a href="results.html?groupId=30"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=31"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=32"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=33"><button>Gr. 4</button></a>
+            </div>
+
+            <button id="a_walbrzych">Wałbrzych</button>
+            <div id="A-klasa_Walbrzych" class="info-box">
+                <h3>A-klasa Wałbrzych</h3>
+                    <a href="results.html?groupId=21"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=22"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=23"><button>Gr. 3</button></a>
+            </div>
+
+            <button id="a_legnica">Legnica</button>
+            <div id="A-klasa_Legnica" class="info-box">
+                <h3>A-klasa Legnica</h3>
+                    <a href="results.html?groupId=12"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=13"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=14"><button>Gr. 3</button></a>
+            </div>
+
+            <button id="a_jelenia_gora">Jelenia Góra</button>
+            <div id="A-klasa_JeleniaGora" class="info-box">
+                <h3>A-klasa Jelenia Góra</h3>
+                    <a href="results.html?groupId=3"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=4"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=5"><button>Gr. 3</button></a>
+            </div>
+
+            <!-- B-KLASA -->
+            <h2>B-klasa</h2>
+            <button id="b_wroclaw">Wrocław</button>
+            <div id="B-klasa_Wroclaw" class="info-box">
+                <h3>B-klasa Wrocław</h3>
+                    <a href="results.html?groupId=34"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=35"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=36"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=37"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=38"><button>Gr. 5</button></a>
+                    <a href="results.html?groupId=39"><button>Gr. 6</button></a>
+                    <a href="results.html?groupId=40"><button>Gr. 7</button></a>
+                    <a href="results.html?groupId=41"><button>Gr. 8</button></a>
+                    <a href="results.html?groupId=42"><button>Gr. 9</button></a>
+            </div>
+            <button id="b_walbrzych">Wałbrzych</button>
+            <div id="B-klasa_Walbrzych" class="info-box">
+                <h3>B-klasa Wałbrzych</h3>
+                    <a href="results.html?groupId=24"><button>Gr. 1</button></a>
+                    <a href="resultshtml?groupId=25"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=26"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=27"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=28"><button>Gr. 5</button></a>
+            </div>
+
+            <button id="b_legnica">Legnica</button>
+            <div id="B-klasa_Legnica" class="info-box">
+                <h3>B-klasa Legnica</h3>
+                    <a href="results.html?groupId=15"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=16"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=17"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=18"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=19"><button>Gr. 5</button></a>
+            </div>
+
+            <button id="b_jelenia_gora">Jelenia Góra</button>
+            <div id="B-klasa_JeleniaGora" class="info-box">
+                <h3>B-klasa Jelenia Góra</h3>
+                    <a href="results.html?groupId=6"><button>Gr. 1</button></a>
+                    <a href="results.html?groupId=7"><button>Gr. 2</button></a>
+                    <a href="results.html?groupId=9"><button>Gr. 3</button></a>
+                    <a href="results.html?groupId=8"><button>Gr. 4</button></a>
+                    <a href="results.html?groupId=10"><button>Gr. 5</button></a>
+            </div>
+            </div>
+
+
+            <!-- Łódzkie -->
+
+            <div id="info-lodzkie" class="info-box">
+                <h1>Łódzkie</h1>
+                    <button>IV liga "Betcris"</button>
+                <h2>Okręgówka</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+                <h2>A-klasa</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+                    <button>Gr. 3</button>
+                    <button>Gr. 4</button>
+                    <button>Gr. 5</button>
+                    <button>Gr. 6</button>
+                    <button>Gr. 7</button>
+                    <button>Gr. 8</button>
+            </div>
+
+            <!-- Lubelskie -->
+            <div id="info-lubelskie" class="info-box">
+                <h1>Lubelskie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Biała Podlaska</button>
+                    <button>Lublin</button>
+                    <button>Zamość</button>
+                <h2>A-klasa</h2>
+                    <button id="a_biala-podlaska">Biała Podlaska</button>
+                        <div class="info-box" id="A-klasa_Biala-Podlaska">
+                            <h2>A-klasa Biała Podlaska</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+            </div>
+
+            <!-- Opolskie -->
+
+            <div id="info-opolskie", class="info-box">
+                <h1>Opolskie</h1>
+                    <button>IV Liga "BS Leśnica"</button>
+                <h2>Okręgówka</h2>
+                    <button>Gr. 1</button>
+                    <button>Gr. 2</button>
+            </div>
+
+            <!-- Śląskie -->
+
+            <div id="info-slaskie", class="info-box">
+                <h1>Śląskie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Częstochowa</button>
+                    <button>Katowice</button>
+                    <button>Racibórz</button>
+                    <button>Skoczów</button>
+                <h2>A-klasa</h2>
+                    <button>Bytom</button>
+                    <button>Racibórz</button>
+                    <button id="a_rybnik">Rybnik</button>
+                        <div class="info-box" id="A-klasa_Rybnik">
+                            <h2>A-klasa Rybnik</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+                <h2>B-klasa</h2>
+                        <button>Racibórz</button>
+                        <button id="b_rybnik">Rybnik</button>
+                            <div class="info-box" id="B-klasa_Rybnik">
+                                <h2>B-klasa Rybnik</h2>
+                                <button>Gr. 1</button>
+                                <button>Gr. 2</button>
+                            </div>
+            </div>
+
+            <!-- Świętokrzyskie -->
+
+            <div id="info-swietokrzyskie" class="info-box">
+                <h1>Świętokrzyskie</h1>
+                    <button>IV Liga Świętokrzyska</button>
+            </div>
+
+            <!-- Małopolskie -->
+
+            <div id="info-malopolskie" class="info-box">
+                <h1>Małopolska</h1>
+                    <button>IV liga</button>
+                <h2>V liga</h2>
+                    <button>V liga Zachodnia</button>
+                    <button>V liga Wschodnia</button>
+                <h2>Okręgówka</h2>
+                    <button id="o_brzesko-bochnia">Brzesko-Bochnia</button>
+                    <button id="o_limanowa">Limanowa</button>
+                    <button id="o_krakow">Kraków</button>
+                    <button id="o_oswiecim">Oświęcim</button>
+                        <div class="info-box" id="Okregowka_Krakow">
+                            <h2>Okręgówka Kraków</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                            <button>Gr. 3</button>
+                        </div>
+                <h2>A-klasa</h2>
+                    <button id="a_bochnia">Bochnia</button>
+                    <button id="a_brzesko">Brzesko</button>
+                    <button id="a_limanowa">Limanowa</button>
+                    <button id="a_chrzenow">Chrzanów</button>
+                    <button id="a_myslenice">Myślenice</button>
+                    <button id="a_nowy-sacz">Nowy Sacz</button>
+                    <button id="a_oswiecim">Oświęcim</button>
+                    <button id="a_wieliczka">Wieliczka</button>
+                    <button id="a_podhalanski">Podhalański</button>
+                    <button id="a_wadowice">Wadowice</button>
+                    <button id="a_zabno">Żabno</button>
+                        <div class="info-box" id="A-klasa_Wadowice">
+                            <h2>A-klasa Wadowice</h2>
+                            <button>Gr. 1 "Suska"</button>
+                            <button>Gr. 2 "Wadowicka"</button>
+                        </div>
+                <h2>B-klasa</h2>
+                    <button id="b_brzesko">Brzesko</button>
+                    <button id="b_limanowa">Limanowa</button>
+                    <button id="b_chrzanow">Chrzanów</button>
+                    <button id="b_wadowice">Wadowice</button>
+                    <button id="b_zabno">Żabno</button>
+                    <button id="b_myslenice">Myślenice</button>
+                    <button id="b_nowy-sacz">Nowy Sacz</button>
+                    <button id="b_oswiecim">Oświęcim</button>
+                    <button id="b_podhalanski">Podhalański</button>
+                    <button id="b_wieliczka">Wieliczka</button>
+                        <div class="info-box" id="B-klasa_Podhalanski">
+                            <h2>B-klasa Podhalański</h2>
+                            <button>Gr. 1 </button>
+                            <button>Gr. 2 </button>
+                        </div>
+                        <div class="info-box" id="B-klasa_Wadowice">
+                            <h2>B-klasa Wadowice</h2>
+                            <button>Gr. 1</button>
+                            <button>Gr. 2</button>
+                        </div>
+            </div>
+
+            <!-- Podkarpackie -->
+
+            <div id="info-podkarpackie", class="info-box">
+                <h1>Podkarpackie</h1>
+                    <button>IV Liga</button>
+                <h2>Okręgówka</h2>
+                    <button>Dębica</button>
+                    <button>Jarosław</button>
+                    <button>Krosno</button>
+                    <button>Rzeszów</button>
+                    <button>Stalowa Wola</button>
+                <h2>A-klasa</h2>
+                    <button>Dębica</button>
+                    <button id="a_jaroslaw">Jarosław</button>
+                    <button id="a_krosno">Krosno</button>
+                    <button id="a_rzeszow">Rzeszów</button>
+                    <button id="a_stalowa-wola">Stalowa Wola</button>
+                        <div class="info-box" id="A-klasa_Jaroslaw">
+                            <h2>A-klasa Jarosław</h2>
+                                <button>Gr. 1</button>
+                                <button>Gr. 2</button>
+                                <button>Gr. 3</button>
+                                <button>Gr. 4</button>
+                        </div>
+                        <div class="info-box" id="A-klasa_Krosno">
+                            <h2>A-klasa Krosno</h2>
+                                <button>Gr. 1</button>
+                                <button>Gr. 2</button>
+                                <button>Gr. 3</button>
+                        </div>
+                        <div class="info-box" id="A-klasa_Rzeszow">
+                            <h2>A-klasa Rzeszow</h2>
+                                <button>Gr. 1</button>
+                                <button>Gr. 2</button>
+                                <button>Gr. 3</button>
+                        </div>
+                        <div class="info-box" id="A-klasa_Stalowa-Wola">
+                            <h2>A-klasa Stalowa Wola</h2>
+                                <button>Gr. 1</button>
+                                <button>Gr. 2</button>
+                        </div>
+                <h2>B-klasa</h2>
+                        <button id="b_debica">Dębica</button>
+                        <button>Jarosław</button>
+                        <button id="b_krosno">Krosno</button>
+                        <button id="b_rzeszow">Rzeszów</button>
+                        <button id="b_stalowa-wola">Stalowa Wola</button>
+                            <div class="info-box" id="B-klasa_Debica">
+                                <h2>B-klasa Dębica</h2>
+                                    <button>Gr. 1</button>
+                                    <button>Gr. 2</button>
+                                    <button>Gr. 3</button>
+                            </div>
+                            <div class="info-box" id="B-klasa_Krosno">
+                                <h2>B-klasa Krosno</h2>
+                                    <button>Gr. 1</button>
+                                    <button>Gr. 2</button>
+                                    <button>Gr. 3</button>
+                                    <button>Gr. 4</button>
+                                    <button>Gr. 5</button>
+                            </div>
+                            <div class="info-box" id="B-klasa_Rzeszow">
+                                <h2>B-klasa Rzeszów</h2>
+                                    <button>Gr. 1</button>
+                                    <button>Gr. 2</button>
+                                    <button>Gr. 3</button>
+                                    <button>Gr. 4</button>
+                                    <button>Gr. 5</button>
+                                    <button>Gr. 6</button>
+                                    <button>Gr. 7</button>
+                            </div>
+                            <div class="info-box" id="B-klasa_Stalowa-Wola">
+                                <h2>B-klasa Stalowa Wola</h2>
+                                    <button>Gr. 1</button>
+                                    <button>Gr. 2</button>
+                                    <button>Gr. 3</button>
+                            </div>
+            </div>
+        </section>
+
+        <h1>Proponowane transmisje</h1>
+
+        <div class="parent">
+            <div class="div1">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 1: Opis transmisji</h1>
+            </div>
+            <div class="div2">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 2: Opis transmisji</h1>
+            </div>
+            <div class="div3">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 3: Opis transmisji</h1>
+            </div>
+            <div class="div4">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 4: Opis transmisji</h1>
+            </div>
+            <div class="div5">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 5: Opis transmisji</h1>
+            </div>
+            <div class="div6">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 6: Opis transmisji</h1>
+            </div>
+            <div class="div7">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 7: Opis transmisji</h1>
+            </div>
+            <div class="div8">
+                <a href="#"><img src="dist/images/przykładowy_baner.jpg" frameborder="0" allowfullscreen></img></a>
+                <h1>Transmisja 8: Opis transmisji</h1>
+            </div>
+        </div>
+    
+
+        <section class="youtube-section">
+            <section class="transmission-selection">
+            <h2>Zobacz ciekawe skróty</h2>
+            <div class="transmission-options">
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 1</p>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 2</p>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 3</p>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 4</p>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 5</p>
+                </div>
+                <div class="transmission-option">
+                    <iframe src="https://www.youtube.com/embed/_W4KJsKZ_Sg?si=d8g_Y2ZVsI3jfcVn" frameborder="0" allowfullscreen></iframe>
+                    <p>Skrót 6</p>
+                </div>
+            </div>
+        </section>
+
+            <section class="contact_form">
+                <h2>Chcesz z nami współpracować?</h2>
+                <h3>Zgłoś się do nas!</h3>
+                <form action="#" method="post">
+                    <label for="name">Imię i nazwisko:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="message">Wiadomość:</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+
+                    <button type="submit">Wyślij</button>
+                </form>
+            </section>
+    </main>
+
+    
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Meczomat.pl</h4>
+                <p>Twój przewodnik po świecie piłki nożnej</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Informacje</h4>
+                <ul class="footer-links">
+                    <li><a href="/credits.html">Credits & Attributions</a></li>
+                    <li><a href="#">Polityka prywatności</a></li>
+                    <li><a href="#">Regulamin</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Social Media</h4>
+                <ul class="footer-links">
+                    <li><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Youtube</a></li>
+                    <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Kontakt</h4>
+                <ul class="footer-links">
+                    <li>+48 123 456 789</li>
+                    <li>test@test.pl</li>
+                    <li><a href="dist/subpages/report_error.html">ZGŁOŚ BŁĄD</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Meczomat.pl | Wszelkie prawa zastrzeżone</p>
+        </div>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="dist/js/main.js"></script>
+</body>
+</html>

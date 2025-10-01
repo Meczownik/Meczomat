@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meczomat</title>
+    <link rel="stylesheet" href="../../../../dist/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jacquard+24&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   <script src="../../../../dist/js/team_results.js"></script>
+
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> -->
+</head>
+<body>
+    <div class="header">
+        <nav>
+            <div class="nav__left">
+                <a href="../../../../../index.html" target="_self" rel="noopener noreferrer" class="logo-link">
+                    <h3>Meczomat.pl</h3>
+                    <h1>|</h1>
+                    <img src="/dist/images/soccer-ball-10232.svg" alt="logo">
+                </a>
+            </div>
+            <div class="nav__center">
+                <ul class="nav__list">
+                    <li><a href="">TRANSMISJE</a></li>
+                    <li><a href="#news">SKRÓTY</a></li>
+                    <li><a href="">EKSTRAKLASA</a></li>
+                    <li><a href="">1-LIGA</a></li>
+                    <li><a href="">NIŻSZE LIGI</a></li>
+                </ul>
+            </div>
+            <div class="nav__right">
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                    <img src="../../../../dist/images/facebook-5222.svg" class="default-icon">
+                    <img src="../../../../dist/images/facebook.webp" class="hover-icon">
+                </a>
+
+                <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                    <img src="../../../../dist/images/youtube-logo-2431.svg" class="default-icon">
+                    <img src="../../../../dist/images/youtube.webp" class="hover-icon">
+                </a>
+    
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                    <img src="../../../../dist/images/instagram-logo-8869.svg" class="default-icon">
+                    <img src="../../../../dist/images/instagram.webp" class="hover-icon">
+                </a>
+            </div>
+        </nav>
+    </div>
+    <main>
+        
+        <!-- Sekcja ładowania drużyn z autocomplete -->
+        <div style="color: white;">
+            <section class="search" style="position: relative;">
+                <input type="text" id="teamSearchInput" placeholder="WPISZ NAZWĘ DRUŻYNY KTÓREJ SZUKASZ" autocomplete="off">
+                <button id="teamSearchBtn">Szukaj</button>
+                <ul id="autocompleteList" class="autocomplete-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; color: black; z-index: 9999; list-style: none; margin: 0; padding: 0; border: 1px solid #ccc;"></ul>
+                <div id="teamSearchError" class="error-message" style="color: red;"></div>
+            </section>
+        </div>
+        <!-- Koniec sekcji -->
+
+        <section class="sponsor">
+            <div class="sponsor-placeholder">MIEJSCE DLA POTENCJALNEGO SPONSORA</div>
+        </section>
+
+
+        <section class="results_table">
+            <div class="table-container">
+                <h3>Tabela wyników</h3>
+                <div class="table-scroll">
+                    <table class="league-table">
+                        <thead>
+                            <tr>
+                                <th>Poz</th>
+                                <th>Nazwa drużyny</th>
+                                <th>Liga</th>
+                                <th>Okręg</th>
+                                <th>Pkt</th>
+                                <th>Rozegrane mecze</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="team-info">
+            <div class="team-info-container" id="teamInfo">
+
+            </div>
+        </section>
+
+        <section class="team_results">
+            <div class="table-container">
+                <h3>Wyniki drużyn</h3>
+                <div class="table-scroll">
+                    <table class="team-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Drużyna 1</th>
+                                <th>Wynik</th>
+                                <th>Drużyna 2</th>
+                                <th>Liga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teamResultsBody">
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="highlights">
+            <h3>NAJCIEKAWSZE SKRÓTY</h3>
+            <div class="highlight-items">
+                <div class="highlight-item">Orzeł 3:0 Lechia</div>
+                <div class="highlight-item">Orzeł 3:0 Lechia</div>
+                <div class="highlight-item">Orzeł 3:0 Lechia</div>
+            </div>
+        </section>
+        
+        <section id="news" class="news">
+            <h3>NAJCIEKAWSZE NEWSY</h3>
+            <div class="news-items">
+                <div class="news-item">Nagłówek</div>
+                <div class="news-item">Nagłówek</div>
+                <div class="news-item">Nagłówek</div>
+            </div>
+        </section>
+    </main>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Meczomat.pl</h4>
+                <p>Twój przewodnik po świecie piłki nożnej</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Informacje</h4>
+                <ul class="footer-links">
+                    <li><a href="/credits.html">Credits & Attributions</a></li>
+                    <li><a href="#">Polityka prywatności</a></li>
+                    <li><a href="#">Regulamin</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Social Media</h4>
+                <ul class="footer-links">
+                    <li><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Youtube</a></li>
+                    <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Kontakt</h4>
+                <ul class="footer-links">
+                    <li>+48 123 456 789</li>
+                    <li>test@test.pl</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Meczomat.pl | Wszelkie prawa zastrzeżone</p>
+        </div>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ 
+</body>
+</html>
