@@ -6,7 +6,7 @@ $(document).ready(function(){
 //------------------------------------------------------------------------------
 
 
-const API_BASE = 'http://127.0.0.1:3000';
+const API_BASE = '/';
 
 $(document).ready(function () {
 

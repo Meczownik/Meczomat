@@ -7,7 +7,7 @@ $(function () {
   const $leagueTbody = $(".league-table tbody");
   const $matchesTbody = $("#teamResultsBody");
 
-  const API_BASE = 'http://127.0.0.1:3000';
+  const API_BASE = '/';
 
   const teamRequest = $.getJSON(`${API_BASE}/teams/${teamId}`);
   const matchesRequest = $.getJSON(`${API_BASE}/matches/team/${teamId}`);
