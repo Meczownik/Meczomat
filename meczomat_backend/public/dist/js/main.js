@@ -6,7 +6,7 @@ $(document).ready(function(){
 //------------------------------------------------------------------------------
 
 
-const API_BASE = '/';
+const API_BASE = 'dpg-d3elobb3fgac738avsug-a';
 
 $(document).ready(function () {
 
