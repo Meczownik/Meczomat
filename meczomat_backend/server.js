@@ -119,7 +119,7 @@ app.get('*', (req, res) => {
 
 // 5. Uruchomienie serwera
 // Render sam ustawi odpowiedni port poprzez zmienną środowiskową PORT
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Serwer Meczomat działa na porcie ${PORT}`);
 });
