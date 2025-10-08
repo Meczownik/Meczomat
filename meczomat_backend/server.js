@@ -129,23 +129,21 @@ app.patch('/matches/:id', async (req, res) => {
 // Pobieranie danych drużyny
 app.get('/teams/:id', async (req, res) => {
     const teamId = req.params.id;
-
     try {
         const result = await pool.query(
-            `SELECT t.*, lg.name as group_name, lg.league, lg.district 
+            `SELECT t.*, lg.name as "groupName", lg.league, lg.district 
              FROM teams t 
              LEFT JOIN league_groups lg ON t.group_id = lg.id 
              WHERE t.id = $1`,
             [teamId]
         );
-
         if (result.rows.length > 0) {
             res.json(result.rows[0]);
         } else {
             res.status(404).json({ error: 'Nie znaleziono drużyny' });
         }
     } catch (error) {
-        console.error('Błąd przy pobieraniu drużyny:', error);
+        console.error('Błąd pobierania drużyny:', error);
         res.status(500).json({ error: 'Błąd serwera' });
     }
 });
@@ -186,18 +184,11 @@ app.get('/standings/:groupId', async (req, res) => {
 // Pobieranie meczów drużyny
 app.get('/matches/team/:teamId', async (req, res) => {
     const teamId = req.params.teamId;
-
     try {
-        const matches = await pool.query(
-            `SELECT 
-                m.id,
-                m."homeGoals",
-                m."awayGoals",
-                m."matchDate",
-                ht.name as "homeTeamName",
-                ht.id as "homeTeamId",
-                at.name as "awayTeamName", 
-                at.id as "awayTeamId"
+        const result = await pool.query(
+            `SELECT m.id, m."homeGoals", m."awayGoals", m."matchDate",
+                    ht.id as "homeTeamId", ht.name as "homeTeamName",
+                    at.id as "awayTeamId", at.name as "awayTeamName"
              FROM matches m
              JOIN teams ht ON m.home_team_id = ht.id
              JOIN teams at ON m.away_team_id = at.id
@@ -205,9 +196,8 @@ app.get('/matches/team/:teamId', async (req, res) => {
              ORDER BY m."matchDate" DESC`,
             [teamId]
         );
-
-        // Formatowanie danych
-        const formattedMatches = matches.rows.map(row => ({
+        
+        const matches = result.rows.map(row => ({
             id: row.id,
             homeGoals: row.homeGoals,
             awayGoals: row.awayGoals,
@@ -217,14 +207,14 @@ app.get('/matches/team/:teamId', async (req, res) => {
                 name: row.homeTeamName
             },
             awayTeam: {
-                id: row.awayTeamId, 
+                id: row.awayTeamId,
                 name: row.awayTeamName
             }
         }));
-
-        res.json(formattedMatches);
+        
+        res.json(matches);
     } catch (error) {
-        console.error(`Błąd przy pobieraniu meczów dla drużyny ${teamId}:`, error);
+        console.error('Błąd pobierania meczów:', error);
         res.status(500).json({ error: 'Błąd serwera' });
     }
 });
