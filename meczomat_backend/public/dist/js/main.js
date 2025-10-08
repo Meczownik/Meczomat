@@ -6,7 +6,7 @@ $(document).ready(function(){
 //------------------------------------------------------------------------------
 
 
-const API_BASE = 'https://meczomat.onrender.com/';
+const API_BASE = '/';
 
 $(document).ready(function () {
 

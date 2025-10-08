@@ -7,7 +7,18 @@ const path = require('path');
 
 // 2. Utworzenie aplikacji Express
 const app = express();
-app.use(cors());
+// W server.js, zastąp obecne app.use(cors()) tym:
+app.use(cors({
+    origin: function (origin, callback) {
+        // Zezwól na żądania bez origin (np. z tej samej domeny) lub z Render
+        if (!origin || origin.includes('render.com') || origin.includes('localhost')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
 app.use(express.json());
 
 // 3. Serwowanie plików statycznych (frontendu) z folderu 'public'
@@ -22,6 +33,12 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   }
+});
+
+// Middleware do logowania żądań
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
 });
 
 
@@ -109,6 +126,135 @@ app.patch('/matches/:id', async (req, res) => {
 
 // Dodaj tutaj resztę swoich endpointów API...
 
+// Pobieranie danych drużyny
+app.get('/teams/:id', async (req, res) => {
+    const teamId = req.params.id;
+
+    try {
+        const result = await pool.query(
+            `SELECT t.*, lg.name as group_name, lg.league, lg.district 
+             FROM teams t 
+             LEFT JOIN league_groups lg ON t.group_id = lg.id 
+             WHERE t.id = $1`,
+            [teamId]
+        );
+
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ error: 'Nie znaleziono drużyny' });
+        }
+    } catch (error) {
+        console.error('Błąd przy pobieraniu drużyny:', error);
+        res.status(500).json({ error: 'Błąd serwera' });
+    }
+});
+
+// Pobieranie tabeli dla grupy
+app.get('/standings/:groupId', async (req, res) => {
+    const groupId = req.params.groupId;
+
+    try {
+        const standings = await pool.query(
+            `SELECT 
+                s.points, 
+                s."goalsFor", 
+                s."goalsAgainst", 
+                s."goalDifference",
+                t.id,
+                t.name as "teamName"
+             FROM standings s
+             JOIN teams t ON s.team_id = t.id
+             WHERE s.group_id = $1
+             ORDER BY s.points DESC, s."goalDifference" DESC, s."goalsFor" DESC`,
+            [groupId]
+        );
+
+        // Formatowanie danych dla frontendu
+        const formattedStandings = standings.rows.map(row => ({
+            points: row.points,
+            goalsFor: row.goalsFor,
+            goalsAgainst: row.goalsAgainst,
+            goalDifference: row.goalDifference,
+            team: {
+                id: row.id,
+                name: row.teamName
+            }
+        }));
+
+        res.json(formattedStandings);
+    } catch (error) {
+        console.error(`Błąd przy pobieraniu tabeli dla grupy ${groupId}:`, error);
+        res.status(500).json({ error: 'Błąd serwera' });
+    }
+});
+
+// Pobieranie meczów drużyny
+app.get('/matches/team/:teamId', async (req, res) => {
+    const teamId = req.params.teamId;
+
+    try {
+        const matches = await pool.query(
+            `SELECT 
+                m.id,
+                m."homeGoals",
+                m."awayGoals",
+                m."matchDate",
+                ht.name as "homeTeamName",
+                ht.id as "homeTeamId",
+                at.name as "awayTeamName", 
+                at.id as "awayTeamId"
+             FROM matches m
+             JOIN teams ht ON m.home_team_id = ht.id
+             JOIN teams at ON m.away_team_id = at.id
+             WHERE m.home_team_id = $1 OR m.away_team_id = $1
+             ORDER BY m."matchDate" DESC`,
+            [teamId]
+        );
+
+        // Formatowanie danych
+        const formattedMatches = matches.rows.map(row => ({
+            id: row.id,
+            homeGoals: row.homeGoals,
+            awayGoals: row.awayGoals,
+            matchDate: row.matchDate,
+            homeTeam: {
+                id: row.homeTeamId,
+                name: row.homeTeamName
+            },
+            awayTeam: {
+                id: row.awayTeamId, 
+                name: row.awayTeamName
+            }
+        }));
+
+        res.json(formattedMatches);
+    } catch (error) {
+        console.error(`Błąd przy pobieraniu meczów dla drużyny ${teamId}:`, error);
+        res.status(500).json({ error: 'Błąd serwera' });
+    }
+});
+
+// Endpoint dla szczegółów grupy (dla results.html)
+app.get('/group/details/:id', async (req, res) => {
+    const groupId = req.params.id;
+
+    try {
+        const groupInfo = await pool.query(
+            'SELECT id, name as "groupName", league, district FROM league_groups WHERE id = $1', 
+            [groupId]
+        );
+
+        if (groupInfo.rows.length > 0) {
+            res.json(groupInfo.rows[0]);
+        } else {
+            res.status(404).json({ error: 'Nie znaleziono grupy' });
+        }
+    } catch (error) {
+        console.error(`Błąd przy pobieraniu grupy ${groupId}:`, error);
+        res.status(500).json({ error: 'Błąd serwera' });
+    }
+});
 
 // Catch-all route: Jeśli żadne zapytanie API nie pasuje, wyślij index.html
 // To ważne dla jednostronicowych aplikacji (SPA), jeśli będziesz takich używał w przyszłości
