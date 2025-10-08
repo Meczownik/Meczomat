@@ -196,47 +196,90 @@ section {
 }
 
 .search {
+    max-width: 720px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.search__box {
     position: relative;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
     align-items: center;
-    margin-top: 20px;
 }
 
-.search input {
-    width: 100vw;
-    height: 80px;
-    padding: 10px 15px;
-    border: 2px solid #4dffc3;
-    border-right: none;
-    border-radius: 25px 0 0 25px;
+#teamSearchInput {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    color: #0e2230;
+    background: #ffffff;
+    border: 1px solid #cfd8e3;
+    border-radius: 10px;
     outline: none;
-    font-size: 1rem;
-    background-color: #002612;
-    color: white;
+    transition: border-color .2s ease, box-shadow .2s ease;
 }
-
-.search input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+#teamSearchInput:focus {
+  border-color: #2b7fff;
+  box-shadow: 0 0 0 4px rgba(43,127,255,.15);
 }
 
 #teamSearchBtn {
-    height: 80px;
-    background-color: #4dffc3;
-    border: 2px solid #4dffc3;
-    border-left: none;
-    border-radius: 0 25px 25px 0;
-    padding: 10px 20px;
+    padding: 12px 16px;
+    font-size: 15px;
+    background: #2b7fff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-    font-size: 1.2rem;
+    transition: background .2s ease, transform .1s ease;
+}
+#teamSearchBtn:hover { background: #1f66d6; }
+#teamSearchBtn:active { transform: translateY(1px); }
+
+.autocomplete-list {
+  display: none;              /* JS pokaże/ukryje */
+  position: absolute;
+  top: calc(100% + 6px);      /* tuż pod inputem */
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  color: #0e2230;
+  z-index: 9999;
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  border: 1px solid #cfd8e3;
+  border-radius: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
 }
 
-#teamSearchBtn:hover {
-    background-color: #00b37a;
+/* Pojedyncza podpowiedź */
+.autocomplete-list li {
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .15s ease, color .15s ease;
+}
+.autocomplete-list li:not(:last-child) {
+  border-bottom: 1px solid #f1f5f9;
+}
+.autocomplete-list li:hover,
+.autocomplete-list li[aria-selected="true"] {
+  background: #f2f6ff;
+  color: #0a58ca;
+}
+
+/* Komunikaty błędów/empty state */
+.error-message {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #d93025;
 }
 
 .map-section {
