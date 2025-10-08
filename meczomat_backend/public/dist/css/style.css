@@ -6,6 +6,12 @@
     scroll-behavior: smooth;
 }
 
+body {
+    overflow-x: hidden;
+    background-color: #003726;
+    padding-top: 100px;
+}
+
 /* Nav content */
 
 .header {
@@ -16,12 +22,6 @@
     z-index: 1000;
     background-color: #003726;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-body {
-    overflow-x: hidden;
-    background-color: #003726;
-    padding-top: 100px;
 }
 
 nav {
@@ -109,13 +109,9 @@ nav ul li a {
 .nav__right img {
     height: 2em;
     margin: 10px 10px;
-    /* filter: grayscale(1); */
-    
 }
 
 .nav__right img:hover{
-    /* transition: 500ms; */
-    /* filter:grayscale(0); */
     cursor: pointer;
 }
 

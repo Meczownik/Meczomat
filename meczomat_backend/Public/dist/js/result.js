@@ -8,7 +8,7 @@ $(function () {
     return;
   }
 
-  const API_BASE = '/'; 
+ const API_BASE = 'https://meczomat.onrender.com';
 
  
   const groupRequest = $.getJSON(`${API_BASE}/group/details/${groupId}`);

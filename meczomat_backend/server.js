@@ -153,38 +153,32 @@ app.get('/teams/:id', async (req, res) => {
 // Pobieranie tabeli dla grupy
 app.get('/standings/:groupId', async (req, res) => {
     const groupId = req.params.groupId;
-
     try {
-        const standings = await pool.query(
-            `SELECT 
-                s.points, 
-                s."goalsFor", 
-                s."goalsAgainst", 
-                s."goalDifference",
-                t.id,
-                t.name as "teamName"
+        const result = await pool.query(
+            `SELECT s.points, s."goalsFor", s."goalsAgainst", s."goalDifference",
+                    t.id, t.name
              FROM standings s
              JOIN teams t ON s.team_id = t.id
              WHERE s.group_id = $1
              ORDER BY s.points DESC, s."goalDifference" DESC, s."goalsFor" DESC`,
             [groupId]
         );
-
-        // Formatowanie danych dla frontendu
-        const formattedStandings = standings.rows.map(row => ({
+        
+        // Formatowanie dla frontendu
+        const standings = result.rows.map(row => ({
             points: row.points,
             goalsFor: row.goalsFor,
             goalsAgainst: row.goalsAgainst,
             goalDifference: row.goalDifference,
             team: {
                 id: row.id,
-                name: row.teamName
+                name: row.name
             }
         }));
-
-        res.json(formattedStandings);
+        
+        res.json(standings);
     } catch (error) {
-        console.error(`Błąd przy pobieraniu tabeli dla grupy ${groupId}:`, error);
+        console.error('Błąd pobierania tabeli:', error);
         res.status(500).json({ error: 'Błąd serwera' });
     }
 });
