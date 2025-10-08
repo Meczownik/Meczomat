@@ -184,11 +184,19 @@ app.get('/standings/:groupId', async (req, res) => {
 // Pobieranie meczów drużyny
 app.get('/matches/team/:teamId', async (req, res) => {
     const teamId = req.params.teamId;
+    console.log('=== MATCHES/TEAM ENDPOINT CALLED ===', teamId);
+    
     try {
         const result = await pool.query(
-            `SELECT m.id, m."homeGoals", m."awayGoals", m."matchDate",
-                    ht.id as "homeTeamId", ht.name as "homeTeamName",
-                    at.id as "awayTeamId", at.name as "awayTeamName"
+            `SELECT 
+                m.id,
+                m."homeGoals",
+                m."awayGoals", 
+                m."matchDate",
+                ht.id as "homeTeamId",
+                ht.name as "homeTeamName",
+                at.id as "awayTeamId", 
+                at.name as "awayTeamName"
              FROM matches m
              JOIN teams ht ON m.home_team_id = ht.id
              JOIN teams at ON m.away_team_id = at.id
@@ -196,6 +204,8 @@ app.get('/matches/team/:teamId', async (req, res) => {
              ORDER BY m."matchDate" DESC`,
             [teamId]
         );
+        
+        console.log('Found matches:', result.rows.length);
         
         const matches = result.rows.map(row => ({
             id: row.id,
@@ -215,7 +225,7 @@ app.get('/matches/team/:teamId', async (req, res) => {
         res.json(matches);
     } catch (error) {
         console.error('Błąd pobierania meczów:', error);
-        res.status(500).json({ error: 'Błąd serwera' });
+        res.status(500).json({ error: 'Błąd serwera: ' + error.message });
     }
 });
 
