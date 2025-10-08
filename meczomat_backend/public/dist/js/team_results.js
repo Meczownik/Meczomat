@@ -7,7 +7,7 @@ $(function () {
   const $leagueTbody = $(".league-table tbody");
   const $matchesTbody = $("#teamResultsBody");
 
-  const API_BASE = '/';
+ const API_BASE = 'https://meczomat.onrender.com';
 
   const teamRequest = $.getJSON(`${API_BASE}/teams/${teamId}`);
   const matchesRequest = $.getJSON(`${API_BASE}/matches/team/${teamId}`);
