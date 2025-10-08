@@ -18,40 +18,69 @@ $(document).ready(function () {
     autocompleteList.empty().hide();
   }
 
-  input.on('input', async function () {
+input.on('input', async function () {
     const name = input.val().trim();
+    console.log('=== WYSZUKIWANIE START ===');
+    console.log('Szukam:', name);
+    
     errorDiv.text('');
     hideAutocomplete();
 
-    if (!name) return;
-
+    if (!name) {
+        console.log('Pusta nazwa - koniec');
+        return;
+    }
+    
     try {
-      const res = await fetch(`${API_BASE}/teams/search?name=${encodeURIComponent(name)}`);
-      if (!res.ok) throw new Error('Błąd podczas wyszukiwania');
-
-      const data = await res.json();
-      if (data.length === 0) return;
-
-      data.forEach(team => {
-        const item = $(`
-          <li class="autocomplete-item" style="cursor:pointer;">
-            <strong>${team.name}</strong>
-          </li>
-        `);
-
-        item.on('click', () => {
-          window.location.href = `/team_results.html?id=${team.id}`;
+        console.log('Wysyłam zapytanie do API...');
+        const res = await fetch(`/teams/search?name=${encodeURIComponent(name)}`);
+        
+        console.log('Odpowiedź status:', res.status);
+        
+        if (!res.ok) {
+            console.error('Błąd HTTP:', res.status);
+            throw new Error('Błąd podczas wyszukiwania');
+        }
+        
+        const data = await res.json();
+        console.log('Otrzymane dane:', data);
+        console.log('Liczba drużyn:', data.length);
+        
+        if (data.length === 0) {
+            console.log('Brak wyników');
+            return;
+        }
+        
+        console.log('Tworzę listę...');
+        
+        // Wyczyść poprzednie wyniki
+        autocompleteList.empty();
+        
+        data.forEach(team => {
+            console.log('Dodaję drużynę:', team.name);
+            
+            const item = $(`
+                <li class="autocomplete-item" style="cursor:pointer; padding: 8px; border-bottom: 1px solid #ccc; background: white; color: black;">
+                    <strong>${team.name}</strong>
+                </li>
+            `);
+            
+            item.on('click', () => {
+                console.log('KLIKNIĘTO:', team.name, 'ID:', team.id);
+                window.location.href = `/team_results.html?id=${team.id}`;
+            });
+            
+            autocompleteList.append(item);
         });
 
-        autocompleteList.append(item);
-      });
-
-      autocompleteList.show();
+        console.log('Pokazuję listę');
+        autocompleteList.show();
+        
     } catch (err) {
-      console.error(err);
-      errorDiv.text('Błąd połączenia z serwerem.');
+        console.error('BŁĄD:', err);
+        errorDiv.text('Błąd połączenia z serwerem.');
     }
-  });
+});
 
   input.on('keydown', function (e) {
     if (e.key === 'Enter' && autocompleteList.children().length > 0) {
