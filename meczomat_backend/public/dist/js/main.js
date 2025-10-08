@@ -18,24 +18,24 @@ $(document).ready(function () {
     autocompleteList.empty().hide();
   }
 
-input.on('input', async function () {
+  input.on('input', async function () {
     const name = input.val().trim();
-    console.log('=== WYSZUKIWANIE ROZPOCZĘTE ===');
-    console.log('Szukana fraza:', name);
+    console.log('=== WYSZUKIWANIE START ===');
+    console.log('Szukam:', name);
     
     errorDiv.text('');
     hideAutocomplete();
 
     if (!name) {
-        console.log('Pusta fraza - pomijam');
+        console.log('Pusta nazwa - koniec');
         return;
     }
     
     try {
-        console.log('Wysyłam żądanie do API...');
+        console.log('Wysyłam zapytanie do API...');
         const res = await fetch(`/teams/search?name=${encodeURIComponent(name)}`);
         
-        console.log('Otrzymano odpowiedź, status:', res.status);
+        console.log('Odpowiedź status:', res.status);
         
         if (!res.ok) {
             console.error('Błąd HTTP:', res.status);
@@ -43,47 +43,41 @@ input.on('input', async function () {
         }
         
         const data = await res.json();
-        console.log('Otrzymane dane z API:', data);
-        console.log('Liczba znalezionych drużyn:', data.length);
+        console.log('Otrzymane dane:', data);
+        console.log('Liczba drużyn:', data.length);
         
         if (data.length === 0) {
             console.log('Brak wyników');
             return;
         }
         
-        console.log('Tworzenie listy autocomplete...');
+        console.log('Tworzę listę...');
         
         // Wyczyść poprzednie wyniki
         autocompleteList.empty();
         
-        data.forEach((team, index) => {
-            console.log(`Dodaję drużynę ${index + 1}:`, team.name, '(ID:', team.id + ')');
+        data.forEach(team => {
+            console.log('Dodaję drużynę:', team.name);
             
             const item = $(`
-                <li class="autocomplete-item" style="cursor:pointer; padding: 10px; border-bottom: 1px solid #ccc; background: white;">
+                <li class="autocomplete-item" style="cursor:pointer; padding: 8px; border-bottom: 1px solid #ccc; background: white; color: black;">
                     <strong>${team.name}</strong>
                 </li>
             `);
             
             item.on('click', () => {
-                console.log('=== KLIKNIĘTO DRUŻYNĘ ===');
-                console.log('Przechodzę do:', `/team_results.html?id=${team.id}`);
-                console.log('Nazwa drużyny:', team.name);
+                console.log('KLIKNIĘTO:', team.name, 'ID:', team.id);
                 window.location.href = `/team_results.html?id=${team.id}`;
             });
             
             autocompleteList.append(item);
         });
 
-        console.log('Pokazuję listę autocomplete');
+        console.log('Pokazuję listę');
         autocompleteList.show();
-        console.log('Czy lista jest widoczna?', autocompleteList.is(':visible'));
         
     } catch (err) {
-        console.error('=== BŁĄD WYSZUKIWANIA ===');
-        console.error('Szczegóły błędu:', err);
-        console.error('Komunikat:', err.message);
-        
+        console.error('BŁĄD:', err);
         errorDiv.text('Błąd połączenia z serwerem.');
     }
 });
