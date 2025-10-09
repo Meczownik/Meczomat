@@ -37,6 +37,9 @@ app.use((req, res, next) => {
     next();
 });
 
+app.options('/teams/search', cors());
+app.options('/matches', cors());
+app.options('/matches/:id', cors());
 
 // --- ENDPOINTY API ---
 // Tutaj umieszczasz "adresy", z którymi łączy się Twój frontend
