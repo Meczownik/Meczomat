@@ -46,23 +46,38 @@ app.options('/matches/:id', cors());
 
 // Przykład: Wyszukiwanie drużyn
 app.get('/teams/search', async (req, res) => {
+    console.log('=== TEAMS/SEARCH CALLED ===');
+    
     const teamName = req.query.name;
     if (!teamName) {
         return res.status(400).json({ error: 'Nazwa drużyny jest wymagana' });
     }
 
     try {
-        // W PostgreSQL używamy $1, $2 zamiast ? jako placeholderów
-        // Używamy ILIKE zamiast LIKE dla wyszukiwania bez rozróżniania wielkości liter
-        const result = await pool.query(
-            'SELECT id, name FROM teams WHERE name ILIKE $1',
-            [`%${teamName}%`]
-        );
-        // Wyniki w bibliotece 'pg' znajdują się w obiekcie result.rows
-        res.json(result.rows);
+        console.log('Searching for team:', teamName);
+        
+        // TEST: Najpierw zwróć stałe dane
+        const testData = [
+            {id: 1, name: "Test Team 1"},
+            {id: 2, name: "Test Team 2"} 
+        ];
+        console.log('Returning test data');
+        return res.json(testData);
+        
+        // Jeśli test działa, odkomentuj prawdziwe zapytanie:
+        // const result = await pool.query(
+        //     'SELECT id, name FROM teams WHERE name ILIKE $1',
+        //     [`%${teamName}%`]
+        // );
+        // console.log('Database result:', result.rows);
+        // res.json(result.rows);
+        
     } catch (error) {
-        console.error('Błąd przy wyszukiwaniu drużyny:', error);
-        res.status(500).json({ error: 'Błąd serwera' });
+        console.error('Błąd w teams/search:', error);
+        res.status(500).json({ 
+            error: 'Błąd serwera',
+            details: error.message 
+        });
     }
 });
 
@@ -289,6 +304,22 @@ app.get('/matches', async (req, res) => {
     } catch (error) {
         console.error('Błąd pobierania meczów:', error);
         res.status(500).json({ error: 'Błąd serwera' });
+    }
+});
+
+app.get('/test-db', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT NOW() as time');
+        res.json({ 
+            status: 'DB connected',
+            time: result.rows[0].time 
+        });
+    } catch (error) {
+        console.error('DB connection error:', error);
+        res.status(500).json({ 
+            error: 'DB connection failed',
+            details: error.message 
+        });
     }
 });
 
