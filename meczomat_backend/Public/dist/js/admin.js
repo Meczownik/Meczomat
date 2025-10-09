@@ -58,7 +58,7 @@ $(document).ready(function () {
 
 
   //------------------------------------------- sekcja akutalizacji meczu
-  form.on('submit', async function (e) {
+form.on('submit', async function (e) {
     e.preventDefault();
 
     const team1Id = team1Input.data('teamId');
@@ -67,47 +67,37 @@ $(document).ready(function () {
     const score2 = Number(score2Input.val());
 
     if (!team1Id || !team2Id) {
-      alert('Musisz wybrać drużyny z listy!');
-      return;
+        alert('Musisz wybrać drużyny z listy!');
+        return;
     }
 
     try {
-      const res = await fetch(`${API_BASE}/matches`);
-      if (!res.ok) throw new Error('Błąd pobierania meczów');
+        console.log('Pobieranie meczów...');
+        const res = await fetch(`${API_BASE}/matches`);
+        
+        console.log('Status odpowiedzi:', res.status);
+        
+        // Sprawdź czy to JSON
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await res.text();
+            console.error('Otrzymano HTML zamiast JSON:', text.substring(0, 200));
+            throw new Error('Serwer zwrócił stronę HTML zamiast danych JSON');
+        }
+        
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || 'Błąd pobierania meczów');
+        }
 
-      const matches = await res.json();
-      const match = matches.find(
-        m =>
-          (m.homeTeam.id === team1Id && m.awayTeam.id === team2Id) ||
-          (m.homeTeam.id === team2Id && m.awayTeam.id === team1Id)
-      );
+        const matches = await res.json();
+        console.log('Otrzymane mecze:', matches);
+        
+        // ... reszta kodu
 
-      if (!match) {
-        alert('Nie znaleziono meczu między tymi drużynami!');
-        return;
-      }
-
-      const updateRes = await fetch(`${API_BASE}/matches/${match.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          homeGoals: score1,
-          awayGoals: score2,
-        }),
-      });
-
-      if (updateRes.ok) {
-        alert('Wynik zmieniony pomyślnie!');
-        form.trigger('reset');
-        team1Input.removeData('teamId');
-        team2Input.removeData('teamId');
-      } else {
-        const err = await updateRes.json();
-        alert(`Błąd: ${err.message || 'Nie udało się zapisać wyniku'}`);
-      }
     } catch (err) {
-      console.error(err);
-      alert(err.message || 'Błąd połączenia z serwerem.');
+        console.error('Błąd:', err);
+        alert('Błąd: ' + err.message);
     }
-  });
+});
 });

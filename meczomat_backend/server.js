@@ -106,20 +106,22 @@ app.get('/group/:id', async (req, res) => {
 app.patch('/matches/:id', async (req, res) => {
     const matchId = req.params.id;
     const { homeGoals, awayGoals } = req.body;
-
+    
+    console.log('Aktualizacja meczu:', matchId, homeGoals, awayGoals);
+    
     try {
         const result = await pool.query(
             'UPDATE matches SET "homeGoals" = $1, "awayGoals" = $2 WHERE id = $3',
             [homeGoals, awayGoals, matchId]
         );
-
+        
         if (result.rowCount > 0) {
             res.json({ message: 'Wynik zaktualizowany pomyślnie' });
         } else {
             res.status(404).json({ error: 'Nie znaleziono meczu' });
         }
     } catch (error) {
-        console.error('Błąd przy aktualizacji wyniku:', error);
+        console.error('Błąd aktualizacji meczu:', error);
         res.status(500).json({ error: 'Błąd serwera' });
     }
 });
@@ -246,6 +248,47 @@ app.get('/group/details/:id', async (req, res) => {
         }
     } catch (error) {
         console.error(`Błąd przy pobieraniu grupy ${groupId}:`, error);
+        res.status(500).json({ error: 'Błąd serwera' });
+    }
+});
+
+// Endpoint dla wszystkich meczów (dla admina)
+app.get('/matches', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT 
+                m.id,
+                m."homeGoals",
+                m."awayGoals",
+                m."matchDate",
+                ht.id as "homeTeamId",
+                ht.name as "homeTeamName", 
+                at.id as "awayTeamId",
+                at.name as "awayTeamName"
+             FROM matches m
+             JOIN teams ht ON m.home_team_id = ht.id
+             JOIN teams at ON m.away_team_id = at.id
+             ORDER BY m."matchDate" DESC`
+        );
+        
+        const matches = result.rows.map(row => ({
+            id: row.id,
+            homeGoals: row.homeGoals,
+            awayGoals: row.awayGoals,
+            matchDate: row.matchDate,
+            homeTeam: {
+                id: row.homeTeamId,
+                name: row.homeTeamName
+            },
+            awayTeam: {
+                id: row.awayTeamId, 
+                name: row.awayTeamName
+            }
+        }));
+        
+        res.json(matches);
+    } catch (error) {
+        console.error('Błąd pobierania meczów:', error);
         res.status(500).json({ error: 'Błąd serwera' });
     }
 });
