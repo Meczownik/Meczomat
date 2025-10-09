@@ -9,7 +9,7 @@ const path = require('path');
 const app = express();
 // W server.js, zastąp obecne app.use(cors()) tym:
 app.use(cors({
-    origin: ['https://meczomat.onrender.com', 'http://localhost:3000', 'http://localhost:10000'],
+    origin: ['https://meczomat.pl', 'https://meczomat.onrender.com', 'http://localhost:3000', 'http://localhost:10000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
