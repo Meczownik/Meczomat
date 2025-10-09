@@ -112,22 +112,38 @@ app.patch('/matches/:id', async (req, res) => {
     const matchId = req.params.id;
     const { homeGoals, awayGoals } = req.body;
     
-    console.log('Aktualizacja meczu:', matchId, homeGoals, awayGoals);
-    
+    console.log('=== PATCH /matches CALLED ===');
+    console.log('Match ID:', matchId);
+    console.log('Home Goals:', homeGoals);
+    console.log('Away Goals:', awayGoals);
+    console.log('Request body:', req.body);
+
     try {
+        // Sprawdź czy mecz istnieje
+        const checkMatch = await pool.query(
+            'SELECT * FROM matches WHERE id = $1',
+            [matchId]
+        );
+        console.log('Match exists:', checkMatch.rows.length > 0);
+
+        // Aktualizuj mecz
         const result = await pool.query(
             'UPDATE matches SET "homeGoals" = $1, "awayGoals" = $2 WHERE id = $3',
             [homeGoals, awayGoals, matchId]
         );
         
+        console.log('Update result - rows affected:', result.rowCount);
+
         if (result.rowCount > 0) {
+            console.log('Update successful');
             res.json({ message: 'Wynik zaktualizowany pomyślnie' });
         } else {
+            console.log('No match found to update');
             res.status(404).json({ error: 'Nie znaleziono meczu' });
         }
     } catch (error) {
         console.error('Błąd aktualizacji meczu:', error);
-        res.status(500).json({ error: 'Błąd serwera' });
+        res.status(500).json({ error: 'Błąd serwera: ' + error.message });
     }
 });
 
