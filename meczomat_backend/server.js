@@ -56,21 +56,12 @@ app.get('/teams/search', async (req, res) => {
     try {
         console.log('Searching for team:', teamName);
         
-        // TEST: Najpierw zwróć stałe dane
-        const testData = [
-            {id: 1, name: "Test Team 1"},
-            {id: 2, name: "Test Team 2"} 
-        ];
-        console.log('Returning test data');
-        return res.json(testData);
-        
-        // Jeśli test działa, odkomentuj prawdziwe zapytanie:
-        // const result = await pool.query(
-        //     'SELECT id, name FROM teams WHERE name ILIKE $1',
-        //     [`%${teamName}%`]
-        // );
-        // console.log('Database result:', result.rows);
-        // res.json(result.rows);
+         const result = await pool.query(
+             'SELECT id, name FROM teams WHERE name ILIKE $1',
+            [`%${teamName}%`]
+         );
+         console.log('Database result:', result.rows);
+         res.json(result.rows);
         
     } catch (error) {
         console.error('Błąd w teams/search:', error);
