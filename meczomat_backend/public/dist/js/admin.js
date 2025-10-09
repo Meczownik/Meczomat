@@ -1,4 +1,4 @@
-const API_BASE = '/';
+ const API_BASE = 'https://meczomat.onrender.com';
 
 $(document).ready(function () {
   const form = $('#matchResultForm');
