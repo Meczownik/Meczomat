@@ -9,16 +9,12 @@ const path = require('path');
 const app = express();
 // W server.js, zastąp obecne app.use(cors()) tym:
 app.use(cors({
-    origin: function (origin, callback) {
-        // Zezwól na żądania bez origin (np. z tej samej domeny) lub z Render
-        if (!origin || origin.includes('render.com') || origin.includes('localhost')) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
+    origin: ['https://meczomat.onrender.com', 'http://localhost:3000', 'http://localhost:10000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 
 // 3. Serwowanie plików statycznych (frontendu) z folderu 'public'
