@@ -66,34 +66,54 @@ form.on('submit', async function (e) {
     const score1 = Number(score1Input.val());
     const score2 = Number(score2Input.val());
 
+    console.log('=== PRÓBA AKTUALIZACJI ===');
+    console.log('Team 1 ID:', team1Id, 'Name:', team1Input.val());
+    console.log('Team 2 ID:', team2Id, 'Name:', team2Input.val());
+    console.log('Score:', score1, ':', score2);
+
     if (!team1Id || !team2Id) {
         alert('Musisz wybrać drużyny z listy!');
         return;
     }
 
     try {
-        console.log('Pobieranie meczów...');
         const res = await fetch(`${API_BASE}/matches`);
+        if (!res.ok) throw new Error('Błąd pobierania meczów');
+        const matches = await res.json();
+
+        console.log('Szukam meczu między drużynami:', team1Id, 'i', team2Id);
         
-        console.log('Status odpowiedzi:', res.status);
-        
-        // Sprawdź czy to JSON
-        const contentType = res.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            const text = await res.text();
-            console.error('Otrzymano HTML zamiast JSON:', text.substring(0, 200));
-            throw new Error('Serwer zwrócił stronę HTML zamiast danych JSON');
-        }
-        
-        if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.message || 'Błąd pobierania meczów');
+        const match = matches.find(m => {
+            const found = (m.homeTeam.id === team1Id && m.awayTeam.id === team2Id) ||
+                         (m.homeTeam.id === team2Id && m.awayTeam.id === team1Id);
+            
+            if (found) {
+                console.log('ZNALEZIONO MECZ:', m);
+                console.log('Match ID:', m.id);
+                console.log('Home Team:', m.homeTeam.name, '(ID:', m.homeTeam.id + ')');
+                console.log('Away Team:', m.awayTeam.name, '(ID:', m.awayTeam.id + ')');
+                console.log('Current score:', m.homeGoals, ':', m.awayGoals);
+            }
+            
+            return found;
+        });
+
+        if (!match) {
+            console.log('NIE ZNALEZIONO MECZU między tymi drużynami');
+            console.log('Dostępne mecze z tymi drużynami:');
+            matches.forEach(m => {
+                if (m.homeTeam.id === team1Id || m.awayTeam.id === team1Id || 
+                    m.homeTeam.id === team2Id || m.awayTeam.id === team2Id) {
+                    console.log('- Match', m.id, ':', m.homeTeam.name, 'vs', m.awayTeam.name);
+                }
+            });
+            alert('Nie znaleziono meczu między tymi drużynami!');
+            return;
         }
 
-        const matches = await res.json();
-        console.log('Otrzymane mecze:', matches);
+        console.log('Aktualizuję mecz ID:', match.id);
         
-        // ... reszta kodu
+        // ... reszta kodu do aktualizacji
 
     } catch (err) {
         console.error('Błąd:', err);
